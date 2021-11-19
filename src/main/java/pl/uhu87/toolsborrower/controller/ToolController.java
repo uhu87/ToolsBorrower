@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.uhu87.toolsborrower.entity.Tool;
 import pl.uhu87.toolsborrower.entity.User;
-import pl.uhu87.toolsborrower.repository.ToolRepository;
-import pl.uhu87.toolsborrower.repository.UserRepository;
+
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
 @RequestMapping("/tool")
 public class ToolController {
 
-    private final UserRepository userRepository;
+   /* private final UserRepository userRepository;
     private final ToolRepository toolRepository;
 
     public ToolController(UserRepository userRepository, ToolRepository toolRepository) {
@@ -51,5 +50,5 @@ public class ToolController {
         return userRepository.findAll();
     }
 
-
+*/
 }

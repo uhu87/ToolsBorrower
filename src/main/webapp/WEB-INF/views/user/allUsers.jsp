@@ -6,7 +6,7 @@
 <c:forEach items="${users}" var="u">
 
     ${u.firstName} <br>
-    ${u.tools} <br>
+    ${u.userTools} <br>
 
 </c:forEach>
 

@@ -15,16 +15,16 @@ public class User {
     private String firstName;
     private String lastName;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Tool> tools = new ArrayList<>();
+    @OneToMany(mappedBy = "user")
+    private List<UserTool> userTools = new ArrayList<>();
 
     public User(){}
 
-    public User(Long id, String firstName, String lastName, List<Tool> tools) {
+    public User(Long id, String firstName, String lastName, List<UserTool> userTools) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.tools = tools;
+        this.userTools = userTools;
     }
 
     public Long getId() {
@@ -51,12 +51,12 @@ public class User {
         this.lastName = lastName;
     }
 
-    public List<Tool> getTools() {
-        return tools;
+    public List<UserTool> getUserTools() {
+        return userTools;
     }
 
-    public void setTools(List<Tool> tools) {
-        this.tools = tools;
+    public void setUserTools(List<UserTool> userTools) {
+        this.userTools = userTools;
     }
 
     @Override
