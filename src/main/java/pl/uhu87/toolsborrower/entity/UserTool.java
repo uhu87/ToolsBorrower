@@ -14,8 +14,8 @@ public class UserTool {
     @ManyToOne
     private User user;
 
-
-    private Long tool_id;
+    @OneToOne
+    private Tool tool;
 
     public Long getId() {
         return id;
@@ -33,16 +33,16 @@ public class UserTool {
         this.user = user;
     }
 
-    public Long getTool_id() {
-        return tool_id;
+    public Tool getTool() {
+        return tool;
     }
 
-    public void setTool_id(Long tool_id) {
-        this.tool_id = tool_id;
+    public void setTool(Tool tool) {
+        this.tool = tool;
     }
 
     @Override
     public String toString() {
-        return ""+tool_id;
+        return ""+tool.getName();
     }
 }
