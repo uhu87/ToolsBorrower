@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.uhu87.toolsborrower.entity.Tool;
+import pl.uhu87.toolsborrower.entity.User;
 import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 
@@ -32,10 +34,17 @@ public class UserController {
     }
 
 
+    @GetMapping("/tool/{id}")
+    public String usersByToolId(Model model, @PathVariable("id") Long id){
+        Tool tool = toolRepository.getById(id);
+        model.addAttribute("users", userRepository.findAllByTools(tool));
+        return "user/byToolId";
+    }
+
+
     @ModelAttribute("tools")
     public List<Tool> tools(){
         return toolRepository.findAll();
     }
-
 
 }

@@ -35,7 +35,7 @@ public class ToolController {
 
 
     @GetMapping("/user/{id}")
-    public String toolsById(Model model, @PathVariable("id") Long id){
+    public String toolsByUserId(Model model, @PathVariable("id") Long id){
         User user = userRepository.getById(id);
         model.addAttribute("tools", toolRepository.findAllByUsers(user));
         return "tool/byUserId";
