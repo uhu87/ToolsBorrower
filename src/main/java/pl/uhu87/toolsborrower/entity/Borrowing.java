@@ -11,7 +11,7 @@ public class Borrowing {
     private Long id;
 
     @ManyToOne
-    private UserTool userTool;    //dane do LENDERA
+    private UserTool userTool;    //dane od LENDERA
 
     @ManyToOne
     @JoinColumn(name = "borrower")

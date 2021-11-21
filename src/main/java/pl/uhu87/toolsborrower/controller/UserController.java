@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.uhu87.toolsborrower.entity.Tool;
+import pl.uhu87.toolsborrower.entity.Borrowing;
 import pl.uhu87.toolsborrower.entity.User;
 import pl.uhu87.toolsborrower.entity.UserTool;
+import pl.uhu87.toolsborrower.repository.BorrowingRepository;
 import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 import pl.uhu87.toolsborrower.repository.UserToolRepository;
@@ -24,12 +25,14 @@ public class UserController {
         private final UserRepository userRepository;
         private final UserToolRepository userToolRepository;
         private final ToolRepository toolRepository;
+        private final BorrowingRepository borrowingRepository;
 
 
-    public UserController(UserRepository userRepository, UserToolRepository userToolRepository, ToolRepository toolRepository) {
+    public UserController(UserRepository userRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, BorrowingRepository borrowingRepository) {
         this.userRepository = userRepository;
         this.userToolRepository = userToolRepository;
         this.toolRepository = toolRepository;
+        this.borrowingRepository = borrowingRepository;
     }
 
     @GetMapping("/all")
@@ -45,7 +48,10 @@ public class UserController {
         User user = userRepository.getById(userId);
         model.addAttribute("userTools", userToolRepository.findAllByUser(user));
         model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
-        model.addAttribute("userToolsBorrowed", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(userId);        // miejsce na streama
+        model.addAttribute("borrowings", borrowings);
+
         return "user/userTools";
     }
 

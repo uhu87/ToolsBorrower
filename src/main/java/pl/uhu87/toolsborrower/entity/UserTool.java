@@ -26,7 +26,7 @@ public class UserTool {
     private String description;
 
 
-    private boolean availible = true;
+    private boolean availible;
 
     public String getDescription() {
         return description;
