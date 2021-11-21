@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "pl.uhu87")
-//@EnableJpaRepositories(basePackages = "pl.uhu87.tools.repository")
+@EnableJpaRepositories(basePackages = "pl.uhu87.toolsborrower.repository")
 public class ToolsBorrowerApplication {
 
     public static void main(String[] args) {

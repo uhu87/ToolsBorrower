@@ -13,17 +13,18 @@ public class Tool {
 
     private String name;
 
-    @ManyToMany
-    private List<User> users;
+    @OneToMany(mappedBy = "tool")
+    private List<UserTool> userTools;
 
 
     public Tool() {}
 
-    public Tool(Long id, String name, List<User> users) {
+
+    public Tool(Long id, String name) {
         this.id = id;
         this.name = name;
-        this.users = users;
     }
+
 
     public Long getId() {
         return id;
@@ -41,16 +42,9 @@ public class Tool {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 
     @Override
     public String toString() {
-        return "" + name;
+        return ""+name;
     }
 }

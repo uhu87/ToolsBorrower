@@ -7,10 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import pl.uhu87.toolsborrower.entity.Tool;
 import pl.uhu87.toolsborrower.entity.User;
 import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
+import pl.uhu87.toolsborrower.repository.UserToolRepository;
+
 
 import java.util.List;
 
@@ -20,10 +21,12 @@ public class ToolController {
 
     private final UserRepository userRepository;
     private final ToolRepository toolRepository;
+    private final UserToolRepository userToolRepository;
 
-    public ToolController(UserRepository userRepository, ToolRepository toolRepository) {
+    public ToolController(UserRepository userRepository, ToolRepository toolRepository, UserToolRepository userToolRepository) {
         this.userRepository = userRepository;
         this.toolRepository = toolRepository;
+        this.userToolRepository = userToolRepository;
     }
 
     @GetMapping("/all")
@@ -33,16 +36,12 @@ public class ToolController {
         return "tool/allTools";
     }
 
+    @GetMapping("/toolUsers/{toolId}")
+    public String allUsersByTool(Model model, @PathVariable("toolId") Long tooLId){
 
-    @GetMapping("/user/{id}")
-    public String toolsByUserId(Model model, @PathVariable("id") Long id){
-        User user = userRepository.getById(id);
-        model.addAttribute("tools", toolRepository.findAllByUsers(user));
-        return "tool/byUserId";
+        model.addAttribute("userTools", userToolRepository.findAllByToolId(tooLId));
+        return "tool/toolUsers";
     }
-
-
-
 
 
 
@@ -50,6 +49,5 @@ public class ToolController {
     public List<User> users(){
         return userRepository.findAll();
     }
-
 
 }
