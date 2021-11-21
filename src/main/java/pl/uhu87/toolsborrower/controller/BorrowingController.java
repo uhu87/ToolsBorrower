@@ -52,6 +52,24 @@ public class BorrowingController {
 
 
 
+    @GetMapping("/return")
+    public String returnTool(Model model, @RequestParam("toRemoveId") Long toRemoveId){
 
+        model.addAttribute("borrowing", borrowingRepository.getById(toRemoveId));
+        return "/borrowing/return";
+
+    }
+    @PostMapping("/return")
+    public String confirmReturn(@RequestParam Long toRemoveId){
+
+        Borrowing borrowing = borrowingRepository.getById(toRemoveId);
+        borrowing.setActive(false);
+        borrowing.getUserTool().setAvailible(true);
+        borrowingRepository.save(borrowing);            // UPDATE!!!!! :D
+        UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
+        userToolRepository.save(userTool);
+        Long currentID = borrowing.getUser().getId();
+     return "redirect:/user/userTools/"+currentID;
+    }
 
 }
