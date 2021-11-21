@@ -13,12 +13,18 @@ public class Tool {
 
     private String name;
 
+    @OneToMany(mappedBy = "tool")
+    private List<UserTool> userTools;
+
+
     public Tool() {}
+
 
     public Tool(Long id, String name) {
         this.id = id;
         this.name = name;
     }
+
 
     public Long getId() {
         return id;
@@ -37,4 +43,8 @@ public class Tool {
     }
 
 
+    @Override
+    public String toString() {
+        return ""+name;
+    }
 }

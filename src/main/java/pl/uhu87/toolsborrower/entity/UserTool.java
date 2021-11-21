@@ -2,7 +2,6 @@ package pl.uhu87.toolsborrower.entity;
 
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class UserTool {
@@ -14,8 +13,36 @@ public class UserTool {
     @ManyToOne
     private User user;
 
-    @OneToOne
+    @ManyToOne
     private Tool tool;
+
+                            /*  (to USER_TOOL ma klucz obcy od TOOL (tool category),
+                                // tutaj JOIN COLUMN z info jak nazwac ten klucz,
+                             Jest to adnotacja opcjonalna – za jej pomocą określamy nazwę klucza obcego.
+                             W przypadku braku zdefiniowanej nazwy, klucz obcy otrzyma nazwę składającą się
+                             z nazwy pola, znaku podkreślenia oraz nazwy klucza drugiej encji. */
+
+
+    private String description;
+
+
+    private boolean availible = true;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isAvailible() {
+        return availible;
+    }
+
+    public void setAvailible(boolean availible) {
+        this.availible = availible;
+    }
 
     public Long getId() {
         return id;

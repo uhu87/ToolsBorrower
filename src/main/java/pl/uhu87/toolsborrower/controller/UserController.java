@@ -39,7 +39,15 @@ public class UserController {
         return "user/allUsers";
     }
 
+    @GetMapping("/userTools/{userId}")
+    public String allToolsByUser(Model model, @PathVariable("userId") Long userId){
 
+        User user = userRepository.getById(userId);
+        model.addAttribute("userTools", userToolRepository.findAllByUser(user));
+        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
+        model.addAttribute("userToolsBorrowed", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        return "user/userTools";
+    }
 
 
     @ModelAttribute("userTools")
