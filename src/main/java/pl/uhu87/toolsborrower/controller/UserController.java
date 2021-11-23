@@ -1,13 +1,14 @@
 package pl.uhu87.toolsborrower.controller;
 
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import pl.uhu87.toolsborrower.UserService;
 import pl.uhu87.toolsborrower.entity.Borrowing;
+import pl.uhu87.toolsborrower.entity.CurrentUser;
 import pl.uhu87.toolsborrower.entity.User;
 import pl.uhu87.toolsborrower.entity.UserTool;
 import pl.uhu87.toolsborrower.repository.BorrowingRepository;
@@ -26,13 +27,14 @@ public class UserController {
         private final UserToolRepository userToolRepository;
         private final ToolRepository toolRepository;
         private final BorrowingRepository borrowingRepository;
+        private final UserService userService;
 
-
-    public UserController(UserRepository userRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, BorrowingRepository borrowingRepository) {
+    public UserController(UserRepository userRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, BorrowingRepository borrowingRepository, UserService userService) {
         this.userRepository = userRepository;
         this.userToolRepository = userToolRepository;
         this.toolRepository = toolRepository;
         this.borrowingRepository = borrowingRepository;
+        this.userService = userService;
     }
 
     @GetMapping("/all")
@@ -44,6 +46,7 @@ public class UserController {
 
     @GetMapping("/userTools/{userId}")
     public String allToolsByUser(Model model, @PathVariable("userId") Long userId){
+
 
         User user = userRepository.getById(userId);
         model.addAttribute("userTools", userToolRepository.findAllByUser(user));
@@ -59,6 +62,40 @@ public class UserController {
     @ModelAttribute("userTools")
     public List<UserTool> userTools(){
         return userToolRepository.findAll();
+    }
+
+
+
+  /*  @GetMapping("/user")
+    @ResponseBody
+    public String admin(@AuthenticationPrincipal CurrentUser customUser) {
+        User entityUser = customUser.getUser();
+        return "Hello " + entityUser.getUsername() + "\n" +
+                entityUser.getFirstName() + " " + entityUser.getLastName() + entityUser.getId();
+    }*/
+
+
+
+
+    @GetMapping("/create-user")
+    @ResponseBody
+    public String createUser() {
+        User user = new User();
+        user.setUsername("user");
+        user.setPassword("user");
+        userService.saveUser(user);
+        return "user";
+    }
+
+
+    @ModelAttribute("currentUser")
+    public String userInfo(@AuthenticationPrincipal UserDetails customUser) {
+
+        if (customUser == null){
+            return "Widok dostepny dla wszystkich";
+        }
+        // log.info("customUser class {} " , customUser.getClass());
+        return customUser.getUsername();
     }
 
 }

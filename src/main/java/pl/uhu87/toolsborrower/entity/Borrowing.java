@@ -17,7 +17,7 @@ public class Borrowing {
     @JoinColumn(name = "borrower")
     private User user;              // BORROWER
 
-    private boolean active;
+    private boolean active = true;
 
 
     public Borrowing() {

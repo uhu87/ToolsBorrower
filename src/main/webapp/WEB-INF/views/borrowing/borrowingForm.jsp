@@ -5,10 +5,11 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <h2>Borrowing details</h2>
-<form:form modelAttribute="borrowing">
+<form:form modelAttribute="userTool">
 
-    Borrower: <form:input path="user"/><br/>
-    UserTool_id: <form:input path="userTool"/><br/>
+    Czy chcesz pozyczyc:  ${userTool.tool} <br>
+
+    Od: ${userTool.user}? <br>
 
     <input type="submit" value="BORROW"><br/>
 
