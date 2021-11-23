@@ -1,10 +1,13 @@
 package pl.uhu87.toolsborrower.controller;
 
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.entity.Borrowing;
+import pl.uhu87.toolsborrower.entity.CurrentUser;
+import pl.uhu87.toolsborrower.entity.User;
 import pl.uhu87.toolsborrower.entity.UserTool;
 import pl.uhu87.toolsborrower.repository.BorrowingRepository;
 import pl.uhu87.toolsborrower.repository.ToolRepository;
@@ -29,23 +32,28 @@ public class BorrowingController {
 
 
     @GetMapping("/create")
-    public String createBorrowing(Model model){
+    public String createBorrowing(Model model, @RequestParam("toolId") Long toolId ){
 
-
-        model.addAttribute("borrowing", new Borrowing());
+        model.addAttribute("userTool", userToolRepository.getById(toolId));
+        //model.addAttribute("borrowing", new Borrowing());
         return "/borrowing/borrowingForm";
 
     }
 
     @PostMapping("/create")
-    public String createBorrowingPost(@ModelAttribute("borrowing") Borrowing borrowing){
+    public String createBorrowingPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser){
 
         // musi byc przed SAVE BORROWING, why?
+
+        User entityUser = customUser.getUser();
+        Borrowing borrowing = new Borrowing();
+        borrowing.setUserTool(userToolRepository.getById(toolId));
+        borrowing.setUser(entityUser);
+        borrowing.setActive(true);
         UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
         userTool.setAvailible(false);
-
         // save
-        borrowingRepository.save(borrowing);
+       borrowingRepository.save(borrowing);
 
         return "redirect:/user/all";
     }
@@ -53,16 +61,16 @@ public class BorrowingController {
 
 
     @GetMapping("/return")
-    public String returnTool(Model model, @RequestParam("toRemoveId") Long toRemoveId){
+    public String returnTool(Model model, @RequestParam("toReturnId") Long toReturnId){
 
-        model.addAttribute("borrowing", borrowingRepository.getById(toRemoveId));
+        model.addAttribute("borrowing", borrowingRepository.getById(toReturnId));
         return "/borrowing/return";
 
     }
     @PostMapping("/return")
-    public String confirmReturn(@RequestParam Long toRemoveId){
+    public String confirmReturn(@RequestParam Long toReturnId){
 
-        Borrowing borrowing = borrowingRepository.getById(toRemoveId);
+        Borrowing borrowing = borrowingRepository.getById(toReturnId);
         borrowing.setActive(false);
         borrowing.getUserTool().setAvailible(true);
         borrowingRepository.save(borrowing);            // UPDATE!!!!! :D

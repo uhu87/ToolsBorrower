@@ -18,7 +18,7 @@ ALL TOOLS: <br>
 AVAILABLE: <br>
 <c:forEach items="${userToolsAvailable}" var="uTA">
 
-    ${uTA.tool} <br>
+    ${uTA.tool}   <a href="/borrowing/create?toolId=${uTA.id}"?>BORROW THIS TOOL</a>  <br>
 
 </c:forEach>
 
@@ -35,7 +35,7 @@ BORROWED FROM OTHERS: <br>
 <c:forEach items="${borrowings}" var="b">
 
    ${b.userTool}   <br>
-    --->  from: ${b.userTool.user} <br>
+    --->  from: ${b.userTool.user} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a> <br>
 
 </c:forEach>
 

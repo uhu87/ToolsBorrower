@@ -7,9 +7,9 @@
 <h2>Borrowing details</h2>
 <form:form  method="post">
 
-    Czy chcesz oddac ${borrowing.userTool} pozyczona od ${borrowing.user}<br/>
+    Czy chcesz oddac ${borrowing.userTool} pozyczona od ${borrowing.userTool.user}<br/>
     <br>
-   <input type="hidden" path="toRemoveId" value="${borrowing.id}"> <br/>
+   <input type="hidden" path="toReturnId" value="${borrowing.id}"> <br/>
 
     <button> <input type="submit" value="RETURN"> </button><br/>
 
