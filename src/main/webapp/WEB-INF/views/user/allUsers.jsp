@@ -8,7 +8,7 @@
 <c:forEach items="${users}" var="u">
 
 
-    <a href="userTools/${u.id}">${u.firstName}</a><br>
+    <a href="userTools/${u.id}">${u.firstName} ${u.lastName}</a><br>
 
 
 </c:forEach>

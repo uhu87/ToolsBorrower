@@ -49,6 +49,7 @@ public class UserController {
 
 
         User user = userRepository.getById(userId);
+        model.addAttribute("user", user);
         model.addAttribute("userTools", userToolRepository.findAllByUser(user));
         model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
         model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailibleFalse(user));
@@ -86,6 +87,24 @@ public class UserController {
         userService.saveUser(user);
         return "user";
     }
+
+
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, @AuthenticationPrincipal CurrentUser customUser) {
+        User entityUser = customUser.getUser();
+        User user = userRepository.getById(entityUser.getId());
+        model.addAttribute("user", user);
+        model.addAttribute("userTools", userToolRepository.findAllByUser(user));
+        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
+        model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(entityUser.getId());        // miejsce na streama
+        model.addAttribute("borrowings", borrowings);
+        return "user/dashboard";
+
+    }
+
+
 
 
     @ModelAttribute("currentUser")

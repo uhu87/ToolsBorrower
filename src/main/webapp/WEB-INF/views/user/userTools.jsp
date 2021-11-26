@@ -1,10 +1,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
-
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <strong><a href="/tool/all">ALL TOOLS</a></strong><br>
 <strong><a href="/user/all">ALL USERS</a></strong><br>
 
-<h2>USER'S VIEW</h2>
+<h2>${user.firstName}'s TOOLS</h2>
 
 <hr>
 ALL TOOLS: <br>
