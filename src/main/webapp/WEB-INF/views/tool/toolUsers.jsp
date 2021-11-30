@@ -6,7 +6,8 @@
 
 <c:forEach items="${userTools}" var="uT">
 
-    ${uT.user} <br>
+    <a href="/user/userTools/${uT.user.id}">${uT.user}</a>
+   <br>
 
 </c:forEach>
 

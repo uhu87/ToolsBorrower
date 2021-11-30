@@ -4,11 +4,13 @@
 
 <strong><a href="/tool/all">ALL TOOLS</a></strong><br>
 <strong><a href="/user/all">ALL USERS</a></strong><br>
+<strong><a href="/user/dashboard">MY ACCOUNT</a></strong><br>
+
 
 <c:forEach items="${users}" var="u">
 
 
-    <a href="userTools/${u.id}">${u.firstName}</a><br>
+    <a href="userTools/${u.id}">${u.firstName} ${u.lastName}</a><br>
 
 
 </c:forEach>

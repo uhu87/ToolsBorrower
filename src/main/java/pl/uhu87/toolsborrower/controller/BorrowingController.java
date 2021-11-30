@@ -51,11 +51,11 @@ public class BorrowingController {
         borrowing.setUser(entityUser);
         borrowing.setActive(true);
         UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
-        userTool.setAvailible(false);
+        userTool.setAvailable(false);
         // save
        borrowingRepository.save(borrowing);
 
-        return "redirect:/user/all";
+        return "redirect:/user/dashboard";
     }
 
 
@@ -72,12 +72,12 @@ public class BorrowingController {
 
         Borrowing borrowing = borrowingRepository.getById(toReturnId);
         borrowing.setActive(false);
-        borrowing.getUserTool().setAvailible(true);
+        borrowing.getUserTool().setAvailable(true);
         borrowingRepository.save(borrowing);            // UPDATE!!!!! :D
         UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
         userToolRepository.save(userTool);
         Long currentID = borrowing.getUser().getId();
-     return "redirect:/user/userTools/"+currentID;
+     return "redirect:/user/dashboard/";
     }
 
 }

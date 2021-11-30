@@ -30,6 +30,6 @@ public class RegistrationController {
     @PostMapping("/addUser")
     public String saveUser(@ModelAttribute("user") User user){
         userService.saveUser(user);
-        return "redirect:/user/all";
+        return "redirect:/login";
     }
 }

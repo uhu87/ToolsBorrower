@@ -1,22 +1,22 @@
 package pl.uhu87.toolsborrower.controller;
 
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.UserService;
-import pl.uhu87.toolsborrower.entity.Borrowing;
-import pl.uhu87.toolsborrower.entity.CurrentUser;
-import pl.uhu87.toolsborrower.entity.User;
-import pl.uhu87.toolsborrower.entity.UserTool;
+import pl.uhu87.toolsborrower.entity.*;
 import pl.uhu87.toolsborrower.repository.BorrowingRepository;
 import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 import pl.uhu87.toolsborrower.repository.UserToolRepository;
 
 
+import javax.persistence.EntityManager;
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 
 @Controller
@@ -38,10 +38,16 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public String allUsers(Model model){
+    public String allUsers(Model model, @AuthenticationPrincipal CurrentUser currentUser){
 
         model.addAttribute("users", userRepository.findAll());
         return "user/allUsers";
+    }
+    @GetMapping("/allButLogged")
+    public String allUsersButLogged(Model model, @AuthenticationPrincipal CurrentUser currentUser){
+
+        model.addAttribute("users", userRepository.findAllbutLogged(currentUser.getUser().getId()));
+        return "user/allUsersButLogged";
     }
 
     @GetMapping("/userTools/{userId}")
@@ -49,9 +55,10 @@ public class UserController {
 
 
         User user = userRepository.getById(userId);
-        model.addAttribute("userTools", userToolRepository.findAllByUser(user));
-        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
-        model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        model.addAttribute("user", user);
+        model.addAttribute("userTools", userToolRepository.findAllByUserAndPresentTrue(user));
+        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
+        model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailableFalseAndPresentTrue(user));
         List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(userId);        // miejsce na streama
         model.addAttribute("borrowings", borrowings);
 
@@ -64,8 +71,6 @@ public class UserController {
         return userToolRepository.findAll();
     }
 
-
-
   /*  @GetMapping("/user")
     @ResponseBody
     public String admin(@AuthenticationPrincipal CurrentUser customUser) {
@@ -73,8 +78,6 @@ public class UserController {
         return "Hello " + entityUser.getUsername() + "\n" +
                 entityUser.getFirstName() + " " + entityUser.getLastName() + entityUser.getId();
     }*/
-
-
 
 
     @GetMapping("/create-user")
@@ -85,6 +88,25 @@ public class UserController {
         user.setPassword("user");
         userService.saveUser(user);
         return "user";
+    }
+
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model, @AuthenticationPrincipal CurrentUser customUser) {
+        User entityUser = customUser.getUser();
+        User user = userRepository.getById(entityUser.getId());
+        model.addAttribute("user", user);
+        model.addAttribute("userTools", userToolRepository.findAllByUserAndPresentTrue(user));
+        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
+
+        List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(entityUser.getId());        // miejsce na streama
+        model.addAttribute("borrowings", borrowings);
+
+        List<Borrowing> lendings = borrowingRepository.findAllLentbyLenderId(entityUser.getId());
+        model.addAttribute("lendings", lendings);
+
+        return "user/dashboard";
+
     }
 
 
