@@ -44,6 +44,7 @@ public class ToolController {
         return "tool/toolUsers";
     }
 
+    //__________________________ADD_USERTOOL________________________________________________________________
 
     @GetMapping("/addUserTool")
     public String addUserTool(Model model) {
@@ -60,7 +61,38 @@ public class ToolController {
         return "redirect:/user/dashboard";
     }
 
+    //__________________________EDIT_________________________________________________________________
 
+    @GetMapping("/editUserTool")
+    public String editUserTool(@RequestParam Long idToEdit, Model model){
+        model.addAttribute("userTool", userToolRepository.getById(idToEdit));
+        return "/tool/userToolForm";
+    }
+
+    @PostMapping("/editUserTool")
+    public String saveEdit (@ModelAttribute("userTool") UserTool userTool, @AuthenticationPrincipal CurrentUser currentUser){
+        userTool.setUser(currentUser.getUser());
+        userToolRepository.save(userTool);
+        return "redirect:/user/dashboard";
+    }
+
+    //__________________________DELETE_________________________________________________________________
+
+    @GetMapping("/delete")
+    public String deleteUserTool(@RequestParam Long idToDelete, Model model){
+        model.addAttribute("userTool", userToolRepository.getById(idToDelete));
+        return "/tool/DeleteConfirmation";
+    }
+
+    @PostMapping("/delete")
+    public String deleteUserToolPost(@RequestParam String confirmed, @RequestParam Long idToDelete){
+        if(confirmed.equals("delete")){
+            UserTool userTool = userToolRepository.getById(idToDelete);
+            userTool.setPresent(false);
+            userToolRepository.save(userTool);
+        }
+            return "redirect:/user/dashboard";
+    }
 
 
 
@@ -68,9 +100,6 @@ public class ToolController {
     public List<Tool> tools (){
         return toolRepository.findAll();
     }
-
-
-
 
 
     @ModelAttribute("users")

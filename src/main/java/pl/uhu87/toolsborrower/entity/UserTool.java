@@ -22,11 +22,11 @@ public class UserTool {
                              W przypadku braku zdefiniowanej nazwy, klucz obcy otrzyma nazwę składającą się
                              z nazwy pola, znaku podkreślenia oraz nazwy klucza drugiej encji. */
 
-
     private String description;
 
+    private boolean available = true;
 
-    private boolean availible;
+    private boolean present = true;
 
     public String getDescription() {
         return description;
@@ -36,12 +36,12 @@ public class UserTool {
         this.description = description;
     }
 
-    public boolean isAvailible() {
-        return availible;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setAvailible(boolean availible) {
-        this.availible = availible;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public Long getId() {
@@ -62,6 +62,14 @@ public class UserTool {
 
     public Tool getTool() {
         return tool;
+    }
+
+    public boolean isPresent() {
+        return present;
+    }
+
+    public void setPresent(boolean present) {
+        this.present = present;
     }
 
     public void setTool(Tool tool) {

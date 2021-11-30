@@ -9,9 +9,8 @@
 
     <form:hidden path="id"/><br/>
 
-    Tool: <form:select path="tool.id" items="${tools}" itemLabel="name" itemValue="id"/><br/>
-
-    Description:<form:input path="description"/><br/>
-    <input type="submit" value="SAVE TOOL"><br/>
+    Czy chcesz usunac ${userTool} | ${userTool.description}
+    <button type="submit" value="delete" name="confirmed">delete</button>
+    <button type="submit" value="cancel" name="confirmed">cancel</button>
 
 </form:form>

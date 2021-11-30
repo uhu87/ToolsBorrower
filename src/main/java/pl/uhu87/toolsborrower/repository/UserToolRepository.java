@@ -13,9 +13,10 @@ public interface UserToolRepository extends JpaRepository <UserTool, Long> {
 
     public List<UserTool> findAllByToolId(Long toolId);
     public List<UserTool> findAllByUser(User user);
+    public List<UserTool> findAllByUserAndPresentTrue(User user);
 
-    public List<UserTool> findAllByUserAndAvailibleTrue(User user);
-    public List<UserTool> findAllByUserAndAvailibleFalse(User user);
+    public List<UserTool> findAllByUserAndAvailableTrueAndPresentTrue(User user);
+    public List<UserTool> findAllByUserAndAvailableFalseAndPresentTrue(User user);
 
     public UserTool getById(Long id);
 

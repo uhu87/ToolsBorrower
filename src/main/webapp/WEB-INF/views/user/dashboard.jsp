@@ -12,7 +12,8 @@
 ALL TOOLS: <br>
 <c:forEach items="${userTools}" var="uT">
 
-    ${uT.tool} | ${uT.description}<br>
+    ${uT.tool} | ${uT.description} | <a href="/tool/editUserTool?idToEdit=${uT.id}">EDIT</a>
+    | <a href="/tool/delete?idToDelete=${uT.id}">DELETE</a><br>
 
 </c:forEach>
 
@@ -28,7 +29,7 @@ AVAILABLE: <br>
 LENT TO OTHERS: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
 <c:forEach items="${lendings}" var="l">
 
-    ${l.userTool} | ${l.userTool.descritpion}    --->  to: ${l.user} <a href="/borrowing/return?toReturnId=${l.id}">SEND REQUEST TO RETURN</a> <br>
+    ${l.userTool} | ${l.userTool.description}    --->  to: ${l.user} <a href="/borrowing/return?toReturnId=${l.id}">SEND REQUEST TO RETURN</a> <br>
 
 </c:forEach>
 

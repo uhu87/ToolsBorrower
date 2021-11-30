@@ -56,9 +56,9 @@ public class UserController {
 
         User user = userRepository.getById(userId);
         model.addAttribute("user", user);
-        model.addAttribute("userTools", userToolRepository.findAllByUser(user));
-        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
-        model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        model.addAttribute("userTools", userToolRepository.findAllByUserAndPresentTrue(user));
+        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
+        model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailableFalseAndPresentTrue(user));
         List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(userId);        // miejsce na streama
         model.addAttribute("borrowings", borrowings);
 
@@ -96,11 +96,8 @@ public class UserController {
         User entityUser = customUser.getUser();
         User user = userRepository.getById(entityUser.getId());
         model.addAttribute("user", user);
-        model.addAttribute("userTools", userToolRepository.findAllByUser(user));
-        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailibleTrue(user));
-
-        // ok, ale zeby pokazac komu, musimy skorzystac z borrowingRepo
-        //model.addAttribute("userToolsLent", userToolRepository.findAllByUserAndAvailibleFalse(user));
+        model.addAttribute("userTools", userToolRepository.findAllByUserAndPresentTrue(user));
+        model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
 
         List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(entityUser.getId());        // miejsce na streama
         model.addAttribute("borrowings", borrowings);
