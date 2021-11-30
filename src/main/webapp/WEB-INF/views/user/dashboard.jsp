@@ -2,7 +2,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <strong><a href="/tool/all">ALL TOOLS</a></strong><br>
-<strong><a href="/user/all">ALL USERS</a></strong><br>
+<strong><a href="/user/allButLogged">ALL USERS</a></strong><br>
+<strong><a href="/logout1">LOG OUT</a></strong><br>
+<strong><a href="/tool/addUserTool">ADD TOOL</a></strong><br>
 
 <h2>WITAJ <sec:authentication property="principal.username"/></h2>
 
@@ -10,7 +12,7 @@
 ALL TOOLS: <br>
 <c:forEach items="${userTools}" var="uT">
 
-    ${uT.tool} <br>
+    ${uT.tool} | ${uT.description}<br>
 
 </c:forEach>
 
@@ -18,15 +20,15 @@ ALL TOOLS: <br>
 AVAILABLE: <br>
 <c:forEach items="${userToolsAvailable}" var="uTA">
 
-    ${uTA.tool}   <a href="/borrowing/create?toolId=${uTA.id}"?>BORROW THIS TOOL</a>  <br>
+    ${uTA.tool} | ${uTA.description}  <%--<a href="/borrowing/create?toolId=${uTA.id}"?>BORROW THIS TOOL</a>--%>  <br>
 
 </c:forEach>
 
 <hr>
 LENT TO OTHERS: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
-<c:forEach items="${userToolsLent}" var="uTL">
+<c:forEach items="${lendings}" var="l">
 
-    ${uTL.tool} <br>
+    ${l.userTool} | ${l.userTool.descritpion}    --->  to: ${l.user} <a href="/borrowing/return?toReturnId=${l.id}">SEND REQUEST TO RETURN</a> <br>
 
 </c:forEach>
 
@@ -34,8 +36,7 @@ LENT TO OTHERS: <br>                                    <%--// mozna potem wykor
 BORROWED FROM OTHERS: <br>
 <c:forEach items="${borrowings}" var="b">
 
-    ${b.userTool}   <br>
-    --->  from: ${b.userTool.user} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a> <br>
+    ${b.userTool} | ${b.userTool.description}      --->  from: ${b.userTool.user} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a> <br>
 
 </c:forEach>
 

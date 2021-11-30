@@ -2,7 +2,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 
-
 <c:forEach items="${users}" var="u">
 
     ${u} <br>

@@ -55,7 +55,7 @@ public class BorrowingController {
         // save
        borrowingRepository.save(borrowing);
 
-        return "redirect:/user/all";
+        return "redirect:/user/dashboard";
     }
 
 
@@ -77,7 +77,7 @@ public class BorrowingController {
         UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
         userToolRepository.save(userTool);
         Long currentID = borrowing.getUser().getId();
-     return "redirect:/user/userTools/"+currentID;
+     return "redirect:/user/dashboard/";
     }
 
 }

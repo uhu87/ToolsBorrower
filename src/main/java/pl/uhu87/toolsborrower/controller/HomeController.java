@@ -13,10 +13,16 @@ public class HomeController {
 
     @GetMapping("/")
 
-    public String hello(){
+    public String dashboard(){
 
         return "redirect:user/dashboard";
     }
 
+    @GetMapping("/hello")
+
+    public String hello(){
+
+        return "hello";
+    }
 }
 

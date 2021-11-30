@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/all").hasAnyRole("USER")
                 .and().formLogin()  // -- przekierowany do strony logowania
                 .loginPage("/login")
-                .and().logout().logoutSuccessUrl("/tool/all")       // domyslny widok wylogowania
+                .and().logout().logoutSuccessUrl("/hello")       // domyslny widok wylogowania
                 .and().exceptionHandling().accessDeniedPage("/403")
                 .and().csrf().disable();
     }

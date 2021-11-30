@@ -1,13 +1,14 @@
 package pl.uhu87.toolsborrower.controller;
 
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import pl.uhu87.toolsborrower.entity.CurrentUser;
+import pl.uhu87.toolsborrower.entity.Tool;
 import pl.uhu87.toolsborrower.entity.User;
+import pl.uhu87.toolsborrower.entity.UserTool;
 import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 import pl.uhu87.toolsborrower.repository.UserToolRepository;
@@ -42,6 +43,33 @@ public class ToolController {
         model.addAttribute("userTools", userToolRepository.findAllByToolId(tooLId));
         return "tool/toolUsers";
     }
+
+
+    @GetMapping("/addUserTool")
+    public String addUserTool(Model model) {
+
+        model.addAttribute("userTool", new UserTool());
+        return "tool/userToolForm";
+    }
+
+    @PostMapping("/addUserTool")
+    public String addUserToolPost(@ModelAttribute("userTool") UserTool userTool, @AuthenticationPrincipal CurrentUser currentUser){
+
+        userTool.setUser(currentUser.getUser());
+        userToolRepository.save(userTool);
+        return "redirect:/user/dashboard";
+    }
+
+
+
+
+
+    @ModelAttribute("tools")
+    public List<Tool> tools (){
+        return toolRepository.findAll();
+    }
+
+
 
 
 

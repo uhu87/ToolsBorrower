@@ -6,10 +6,10 @@
 <strong><a href="/user/allButLogged">ALL USERS</a></strong><br>
 <strong><a href="/user/dashboard">MY ACCOUNT</a></strong><br>
 
-<c:forEach items="${tools}" var="t">
+<c:forEach items="${users}" var="u">
 
 
-    <a href="/tool/toolUsers/${t.id}">${t.name}</a><br>
+    <a href="userTools/${u.id}">${u.firstName} ${u.lastName}</a><br>
 
 
 </c:forEach>
