@@ -37,7 +37,8 @@ LENT TO OTHERS: <br>                                    <%--// mozna potem wykor
 BORROWED FROM OTHERS: <br>
 <c:forEach items="${borrowings}" var="b">
 
-    ${b.userTool} | ${b.userTool.description}      --->  from: ${b.userTool.user} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a> <br>
+    ${b.userTool} | ${b.userTool.description}      --->  from: ${b.userTool.user}
+    | TILL: ${b.end} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a> <br>
 
 </c:forEach>
 

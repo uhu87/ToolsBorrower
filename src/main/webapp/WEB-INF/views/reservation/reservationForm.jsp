@@ -7,12 +7,12 @@
 <h2>Borrowing details</h2>
 <form:form modelAttribute="userTool">
 
-    Pozyczasz:  ${userTool.tool} <br>
+    Zarezerwuj:  ${userTool.tool} <br>
 
     Od: ${userTool.user}? <br>
 
-<%--    Podaj date pozyczenia: <input type="date" path="start" value="start" name="start"> <br>--%>
-    Pozyczam do: <input type="date" path="end" value="end" name="end">
+        Podaj date pozyczenia: <input type="date" path="start" value="start" name="start"> <br>
+        Podaj date oddania: <input type="date" path="end" value="end" name="end">
 
     <input type="submit" value="BORROW"><br/>
 
