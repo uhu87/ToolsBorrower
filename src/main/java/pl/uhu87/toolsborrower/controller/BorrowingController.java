@@ -14,6 +14,8 @@ import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 import pl.uhu87.toolsborrower.repository.UserToolRepository;
 
+import java.time.LocalDate;
+
 @Controller
 @RequestMapping("/borrowing")
 public class BorrowingController {
@@ -41,7 +43,9 @@ public class BorrowingController {
     }
 
     @PostMapping("/create")
-    public String createBorrowingPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser){
+
+    public String createBorrowingPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
+                                      @RequestParam String end){
 
         // musi byc przed SAVE BORROWING, why?
 
@@ -52,10 +56,11 @@ public class BorrowingController {
         borrowing.setActive(true);
         UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
         userTool.setAvailable(false);
+        borrowing.setEnd(LocalDate.parse(end));
         // save
        borrowingRepository.save(borrowing);
 
-        return "redirect:/user/dashboard";
+       return "redirect:/user/dashboard";
     }
 
 

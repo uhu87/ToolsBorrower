@@ -1,11 +1,10 @@
 package pl.uhu87.toolsborrower.entity;
 
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Borrowing {
+public class Reservation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,24 +15,24 @@ public class Borrowing {
 
     @ManyToOne
     @JoinColumn(name = "borrower")
-    private User user;              // BORROWER
+    private User user;
+
+    private LocalDate start;
+    private  LocalDate end;
 
     private boolean active = true;
 
-    private LocalDate end;
+    public Reservation() {
+    }
 
-
-    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate end) {
+    public Reservation(Long id, UserTool userTool, User user, LocalDate start, LocalDate end, boolean active) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
-        this.active = active;
+        this.start = start;
         this.end = end;
+        this.active = active;
     }
-
-    public Borrowing() {
-    }
-
 
     public Long getId() {
         return id;
@@ -59,12 +58,12 @@ public class Borrowing {
         this.user = user;
     }
 
-    public boolean isActive() {
-        return active;
+    public LocalDate getStart() {
+        return start;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStart(LocalDate start) {
+        this.start = start;
     }
 
     public LocalDate getEnd() {
@@ -74,4 +73,6 @@ public class Borrowing {
     public void setEnd(LocalDate end) {
         this.end = end;
     }
+
 }
+
