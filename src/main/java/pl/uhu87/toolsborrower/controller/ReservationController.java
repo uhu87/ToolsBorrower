@@ -9,6 +9,7 @@ import pl.uhu87.toolsborrower.repository.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Controller
 @RequestMapping("/reservation")
@@ -37,9 +38,15 @@ public class ReservationController {
 
 
     @PostMapping("/make")
+    @ResponseBody
 
     public String makeReservationPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
                                       @RequestParam String start, @RequestParam String end){
+
+        updateReservationsStatus(toolId);
+        List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
+        LocalDate returnDate = borrowingRepository.findFirstByUserToolIdAndActiveTrue(toolId).getEnd();
+
 
         User entityUser = customUser.getUser();
         Reservation reservation = new Reservation();
@@ -48,17 +55,58 @@ public class ReservationController {
         UserTool userTool = userToolRepository.getById(reservation.getUserTool().getId());
         reservation.setStart(LocalDate.parse(start));
         reservation.setEnd(LocalDate.parse(end));
+        for(Reservation r : allReservationsActive){
+            if (isOverlapping(LocalDate.parse(start), LocalDate.parse(end), r.getStart(), r.getEnd())){
+                return "overlpas";
+            }
+            if(LocalDate.parse(start).isAfter(LocalDate.parse(end))){
+                return "startDate nie moze byc po endDate";
+            }
+            if(LocalDate.parse(start).isBefore(LocalDate.now())){
+                return "nie mozna rezerwowac w przeszlosci :D";
+            }
+            if(returnDate.isAfter(LocalDate.parse(start))){
+                return "nardzenia chwilowo pozyczone, zostanie oddane "+ returnDate.toString();
+            }
+            if(returnDate.isEqual(LocalDate.parse(start))){
+                return "Dnia"+ returnDate.toString() +" inny uzytkownik oddaje narzedzie, skontaktuje sie z wlasciwielem zeby ustalic szczegoly";
+            }
+        }
+
         // save
         reservationRepository.save(reservation);
-
-        return "redirect:/reservation/reservationList?toolId="+toolId;
+        //return "redirect:/reservation/reservationList?toolId="+toolId;
+        return "yz OKE";
     }
 
     @GetMapping("/reservationList")
-    public String showToolReservations(Model model, @RequestParam Long toolId) {
+    public String showAllReservations(Model model, @RequestParam Long toolId) {
 
+        updateReservationsStatus(toolId);
+
+        List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
         model.addAttribute("userTool", userToolRepository.getById(toolId));
-        model.addAttribute("reservations", reservationRepository.findAllByUserToolId(toolId));
+        model.addAttribute("reservations", allReservationsActive);
         return "reservation/reservationList";
     }
+
+
+
+    public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
+
+        return !start1.isAfter(end2) && !start2.isAfter(end1);
+
+    }
+
+    public void updateReservationsStatus(Long toolId){
+        List<Reservation> allReservations = reservationRepository.findAllByUserToolIdOrderByStart(toolId);
+        for(Reservation r : allReservations){
+            if (LocalDate.now().isAfter(r.getStart())){
+                r.setActive(false);
+                reservationRepository.save(r);
+            }
+        }
+    }
+
+
 }

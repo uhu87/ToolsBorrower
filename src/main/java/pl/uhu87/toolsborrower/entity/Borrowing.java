@@ -20,15 +20,17 @@ public class Borrowing {
 
     private boolean active = true;
 
+    private LocalDate start;
     private LocalDate end;
 
 
-    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate end) {
+    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate Start, LocalDate end) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
         this.active = active;
         this.end = end;
+        this.start = LocalDate.now();
     }
 
     public Borrowing() {
@@ -65,6 +67,14 @@ public class Borrowing {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public LocalDate getStart() {
+        return start;
+    }
+
+    public void setStart(LocalDate start) {
+        this.start = start;
     }
 
     public LocalDate getEnd() {

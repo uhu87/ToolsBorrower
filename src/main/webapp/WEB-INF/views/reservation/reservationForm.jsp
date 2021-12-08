@@ -4,7 +4,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2>Borrowing details</h2>
+<h2>Reservations details</h2>
 <form:form modelAttribute="userTool">
 
     Zarezerwuj:  ${userTool.tool} <br>
