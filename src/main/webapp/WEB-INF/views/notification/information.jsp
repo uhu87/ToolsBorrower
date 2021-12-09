@@ -5,12 +5,13 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 <h2>Wiadomość do pożyczającego</h2>
-<form:form  method="post">
+<form:form  modelAttribute="information">
+
 
     Wyślij wiadomość do użytkownika <br/>
     <br>
-<%--   <input type="hidden" path="toReturnId" value="${borrowing.id}"> <br/>--%>
-    <input type="text" >
-    <button> <input type="submit" value="RETURN">WYŚLIJ</button><br/>
+
+    Wiadomość:<input type="text" value="" name="information"/><br/>
+    <button> <input type="submit" value="SEND"></button><br/>
 
 </form:form>

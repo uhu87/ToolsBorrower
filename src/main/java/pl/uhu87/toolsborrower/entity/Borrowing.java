@@ -24,16 +24,17 @@ public class Borrowing {
     private LocalDate start = LocalDate.now();
     private LocalDate end;
 
-    private String reminder;
+    private String notification;
 
 
-    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate start, LocalDate end) {
+    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate start, LocalDate end, String notification) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
         this.active = active;
         this.end = end;
         this.start = start;
+        this.notification = notification;
     }
 
     public Borrowing() {
@@ -88,11 +89,11 @@ public class Borrowing {
         this.end = end;
     }
 
-    public String getReminder() {
-        return reminder;
+    public String getNotification() {
+        return notification;
     }
 
-    public void setReminder(String reminder) {
-        this.reminder = reminder;
+    public void setNotification(String notification) {
+        this.notification = notification;
     }
 }

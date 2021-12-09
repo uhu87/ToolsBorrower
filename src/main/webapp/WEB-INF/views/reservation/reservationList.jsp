@@ -19,7 +19,8 @@
 <h2>Reservation list of ${userTool}</h2>
 <c:forEach items="${reservations}" var="r">
 
-    ${r.user} | ${r.start} | ${r.end}  <br>
+    ${r.user} | ${r.start} | ${r.end} | <a href="/notification/information?reservationId=${r.id}">SEND INFO</a> <br>
+    <br>
 
 
 </c:forEach>

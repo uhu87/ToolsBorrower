@@ -22,16 +22,19 @@ public class Reservation {
 
     private boolean active = true;
 
+    private String notification;
+
     public Reservation() {
     }
 
-    public Reservation(Long id, UserTool userTool, User user, LocalDate start, LocalDate end, boolean active) {
+    public Reservation(Long id, UserTool userTool, User user, LocalDate start, LocalDate end, boolean active, String notification) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
         this.start = start;
         this.end = end;
         this.active = active;
+        this.notification = notification;
     }
 
     public Long getId() {
@@ -82,6 +85,13 @@ public class Reservation {
         this.end = end;
     }
 
+    public String getNotification() {
+        return notification;
+    }
+
+    public void setNotification(String notification) {
+        this.notification = notification;
+    }
 
     @Override
     public String toString() {
