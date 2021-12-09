@@ -70,9 +70,29 @@ public class Reservation {
         return end;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public void setEnd(LocalDate end) {
         this.end = end;
     }
 
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id=" + id +
+                ", userTool=" + userTool +
+                ", user=" + user +
+                ", start=" + start +
+                ", end=" + end +
+                ", active=" + active +
+                '}';
+    }
 }
 

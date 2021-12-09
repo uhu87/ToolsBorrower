@@ -33,7 +33,7 @@ public class ToolController {
     @GetMapping("/all")
     public String allTools(Model model){
 
-        model.addAttribute("tools", toolRepository.findAll());
+        model.addAttribute("tools", toolRepository.findAllOderByname());
         return "tool/allTools";
     }
 
@@ -98,7 +98,7 @@ public class ToolController {
 
     @ModelAttribute("tools")
     public List<Tool> tools (){
-        return toolRepository.findAll();
+        return toolRepository.findAllOderByname();
     }
 
 

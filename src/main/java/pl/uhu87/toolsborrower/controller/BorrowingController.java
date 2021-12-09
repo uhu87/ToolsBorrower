@@ -5,16 +5,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.uhu87.toolsborrower.entity.Borrowing;
-import pl.uhu87.toolsborrower.entity.CurrentUser;
-import pl.uhu87.toolsborrower.entity.User;
-import pl.uhu87.toolsborrower.entity.UserTool;
-import pl.uhu87.toolsborrower.repository.BorrowingRepository;
-import pl.uhu87.toolsborrower.repository.ToolRepository;
-import pl.uhu87.toolsborrower.repository.UserRepository;
-import pl.uhu87.toolsborrower.repository.UserToolRepository;
+import pl.uhu87.toolsborrower.entity.*;
+import pl.uhu87.toolsborrower.repository.*;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/borrowing")
@@ -24,12 +20,14 @@ public class BorrowingController {
     private final UserToolRepository userToolRepository;
     private final ToolRepository toolRepository;
     private final UserRepository userRepository;
+    private final ReservationRepository reservationRepository;
 
-    public BorrowingController(BorrowingRepository borrowingRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, UserRepository userRepository) {
+    public BorrowingController(BorrowingRepository borrowingRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, UserRepository userRepository, ReservationRepository reservationRepository) {
         this.borrowingRepository = borrowingRepository;
         this.userToolRepository = userToolRepository;
         this.toolRepository = toolRepository;
         this.userRepository = userRepository;
+        this.reservationRepository = reservationRepository;
     }
 
 
@@ -45,9 +43,26 @@ public class BorrowingController {
     @PostMapping("/create")
 
     public String createBorrowingPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
-                                      @RequestParam String end){
+                                      @RequestParam String end, Model model){
 
-        // musi byc przed SAVE BORROWING, why?
+        updateReservationsStatus(toolId);
+        try {
+            LocalDate returnDate = reservationRepository.findEarliestActiveReservation(toolId).getStart();
+
+
+            if (LocalDate.parse(end).isAfter(returnDate)) {
+                model.addAttribute("returnDate", returnDate);
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "reservation/borrowingOverlap";
+            }
+
+            if (LocalDate.parse(end).isBefore(LocalDate.now())) {
+                model.addAttribute("returnDate", returnDate);
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "borrowing/borrowingPast";
+            }
+        }catch (NullPointerException e){};
+
 
         User entityUser = customUser.getUser();
         Borrowing borrowing = new Borrowing();
@@ -83,6 +98,39 @@ public class BorrowingController {
         userToolRepository.save(userTool);
         Long currentID = borrowing.getUser().getId();
      return "redirect:/user/dashboard/";
+    }
+
+
+  /*  @GetMapping("/borrowingOverlap")
+
+    public  String  borrowingOverlap(@RequestParam("returnDate") String returnDate, Model model){
+        model.addAttribute("returnDate", returnDate);
+
+      return "reservation/borrowingOverlap";
+    }*/
+
+
+    @GetMapping("/history")
+    public String borrowingHistory(@RequestParam("toolId") Long toolId, Model model){
+
+        UserTool userTool = userToolRepository.getById(toolId);
+        List<Borrowing> borrowings = borrowingRepository.findAllByUserToolId(toolId);
+        model.addAttribute("borrowings", borrowings);
+        model.addAttribute("userTool", userTool);
+        return "borrowing/history";
+    }
+
+
+
+
+    public void updateReservationsStatus(Long toolId){
+        List<Reservation> allReservations = reservationRepository.findAllByUserToolIdOrderByStart(toolId);
+        for(Reservation r : allReservations){
+            if (LocalDate.now().isAfter(r.getStart())){
+                r.setActive(false);
+                reservationRepository.save(r);
+            }
+        }
     }
 
 }
