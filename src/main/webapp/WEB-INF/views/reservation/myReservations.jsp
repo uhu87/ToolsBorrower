@@ -15,7 +15,12 @@
 <c:forEach items="${reservations}" var="r">
 
     ${r.userTool} | ${r.start} | ${r.end}  from ---> ${r.userTool.user} |
-    <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a><br>
+    <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a>
+    <c:if test="${r.notification != null}">
+        |  ${r.notification}
+    </c:if>
+
+    <br>
 
 
 </c:forEach>

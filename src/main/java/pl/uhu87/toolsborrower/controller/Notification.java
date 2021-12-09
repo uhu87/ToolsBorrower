@@ -3,11 +3,9 @@ package pl.uhu87.toolsborrower.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.entity.Borrowing;
+import pl.uhu87.toolsborrower.entity.Reservation;
 import pl.uhu87.toolsborrower.repository.*;
 
 @Controller
@@ -30,12 +28,40 @@ public class Notification {
 
 
     @GetMapping("/return")
-    @ResponseBody
+
     public String sendReturnNotification(@RequestParam Long toReturnId, Model model){
 
-        Borrowing borrowing = borrowingRepository.getById(toReturnId);
-        model.addAttribute("borrowing", borrowing);
         return "notification/return";
     }
 
+    @PostMapping("/return")
+
+    public String sendReturnNotificationPost(@RequestParam Long toReturnId, @RequestParam String notification){
+        Borrowing borrowing = borrowingRepository.getById(toReturnId);
+        borrowing.setNotification(notification);
+        borrowingRepository.save(borrowing);
+
+        return "redirect:/user/dashboard";
+
+    }
+
+
+    //-------------------------------------infromation for reservation---------------------------
+    @GetMapping("/information")
+
+    public String sendInformation(@RequestParam Long reservationId, Model model){
+
+        return "notification/information";
+    }
+
+    @PostMapping("/information")
+
+    public String sendInformationPost(@RequestParam Long reservationId, @RequestParam String information){
+        Reservation reservation = reservationRepository.getById(reservationId);
+        reservation.setNotification(information);
+        reservationRepository.save(reservation);
+
+        return "redirect:/user/dashboard";
+
+    }
 }

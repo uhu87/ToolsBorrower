@@ -16,7 +16,9 @@ ALL TOOLS: <br>
     ${uT.tool} | ${uT.description} | <a href="/tool/editUserTool?idToEdit=${uT.id}">EDIT</a>
     | <a href="/tool/delete?idToDelete=${uT.id}">DELETE</a>
     | <a href="/borrowing/history?toolId=${uT.id}">BORROWING HISTORY</a>
-    | <a href="/reservation/reservationList?toolId=${uT.id}">CHECK RESERVATIONS</a><br>
+    | <a href="/reservation/reservationList?toolId=${uT.id}">CHECK RESERVATIONS</a>
+
+    <br>
 
 </c:forEach>
 
@@ -32,7 +34,8 @@ ALL TOOLS: <br>
 LENT TO OTHERS: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
 <c:forEach items="${lendings}" var="l">
 
-    ${l.userTool} | ${l.userTool.description}    --->  to: ${l.user} <a href="/notification/return?toReturnId=${l.id}">SEND REQUEST TO RETURN</a> <br>
+    ${l.userTool} | ${l.userTool.description}    ---> to: ${l.user} <a href="/notification/return?toReturnId=${l.id}">SEND
+    REQUEST TO RETURN</a> <br>
 
 </c:forEach>
 
@@ -40,8 +43,13 @@ LENT TO OTHERS: <br>                                    <%--// mozna potem wykor
 BORROWED FROM OTHERS: <br>
 <c:forEach items="${borrowings}" var="b">
 
-    ${b.userTool} | ${b.userTool.description}      --->  from: ${b.userTool.user}
-    | TILL: ${b.end} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a> <br>
+    ${b.userTool} | ${b.userTool.description}      ---> from: ${b.userTool.user}
+    | TILL: ${b.end} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a>
+    <c:if test="${b.notification != null}">
+        |  ${b.notification}
+    </c:if>
+
+    <br>
 
 </c:forEach>
 
