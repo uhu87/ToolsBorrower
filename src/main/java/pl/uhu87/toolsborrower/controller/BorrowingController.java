@@ -10,6 +10,7 @@ import pl.uhu87.toolsborrower.repository.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/borrowing")
@@ -45,25 +46,23 @@ public class BorrowingController {
                                       @RequestParam String end, Model model){
 
         updateReservationsStatus(toolId);
-        LocalDate returnDate = reservationRepository.findEarliestActiveReservation(toolId).getStart();
+        try {
+            LocalDate returnDate = reservationRepository.findEarliestActiveReservation(toolId).getStart();
 
-        if(LocalDate.parse(end).isAfter(returnDate)){
-            model.addAttribute("returnDate", returnDate);
-            model.addAttribute("userTool", userToolRepository.getById(toolId));
-            return "reservation/borrowingOverlap";
-        }
 
-        if(LocalDate.parse(end).isBefore(LocalDate.now())){
-            model.addAttribute("returnDate", returnDate);
-            model.addAttribute("userTool", userToolRepository.getById(toolId));
-            return "borrowing/borrowingPast";
-        }
-      /*  if(LocalDate.parse(end).isEqual(reservationRepository.findEarliestActiveReservation(toolId).getStart())){
-            String returnDate = reservationRepository.findEarliestActiveReservation(toolId).getStart().toString();
-            return "redirect:/borrowing/borrowingOverlapSameDay?returnDate="+returnDate+"toolId";
-        }*/
+            if (LocalDate.parse(end).isAfter(returnDate)) {
+                model.addAttribute("returnDate", returnDate);
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "reservation/borrowingOverlap";
+            }
 
-        //return "mozna brac";
+            if (LocalDate.parse(end).isBefore(LocalDate.now())) {
+                model.addAttribute("returnDate", returnDate);
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "borrowing/borrowingPast";
+            }
+        }catch (NullPointerException e){};
+
 
         User entityUser = customUser.getUser();
         Borrowing borrowing = new Borrowing();
@@ -114,8 +113,10 @@ public class BorrowingController {
     @GetMapping("/history")
     public String borrowingHistory(@RequestParam("toolId") Long toolId, Model model){
 
-        List<Borrowing> allBorrowings = borrowingRepository.findAllByUserToolId(toolId);
-        model.addAttribute("allBorrowings", allBorrowings);
+        UserTool userTool = userToolRepository.getById(toolId);
+        List<Borrowing> borrowings = borrowingRepository.findAllByUserToolId(toolId);
+        model.addAttribute("borrowings", borrowings);
+        model.addAttribute("userTool", userTool);
         return "borrowing/history";
     }
 
@@ -131,11 +132,5 @@ public class BorrowingController {
             }
         }
     }
-
-
-
-
-
-
 
 }

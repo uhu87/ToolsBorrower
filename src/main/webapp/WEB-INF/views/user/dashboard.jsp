@@ -5,6 +5,7 @@
 <strong><a href="/user/allButLogged">ALL USERS</a></strong><br>
 <strong><a href="/logout1">LOG OUT</a></strong><br>
 <strong><a href="/tool/addUserTool">ADD TOOL</a></strong><br>
+<strong><a href="/reservation/myReservations">MY RESERVATIONS</a></strong><br>
 
 <h2>WITAJ <sec:authentication property="principal.username"/></h2>
 
@@ -13,23 +14,25 @@ ALL TOOLS: <br>
 <c:forEach items="${userTools}" var="uT">
 
     ${uT.tool} | ${uT.description} | <a href="/tool/editUserTool?idToEdit=${uT.id}">EDIT</a>
-    | <a href="/tool/delete?idToDelete=${uT.id}">DELETE</a><br>
+    | <a href="/tool/delete?idToDelete=${uT.id}">DELETE</a>
+    | <a href="/borrowing/history?toolId=${uT.id}">BORROWING HISTORY</a>
+    | <a href="/reservation/reservationList?toolId=${uT.id}">CHECK RESERVATIONS</a><br>
 
 </c:forEach>
 
 <hr>
-AVAILABLE: <br>
+<%--AVAILABLE: <br>
 <c:forEach items="${userToolsAvailable}" var="uTA">
 
-    ${uTA.tool} | ${uTA.description}  <%--<a href="/borrowing/create?toolId=${uTA.id}"?>BORROW THIS TOOL</a>--%>  <br>
+    ${uTA.tool} | ${uTA.description}  &lt;%&ndash;<a href="/borrowing/create?toolId=${uTA.id}"?>BORROW THIS TOOL</a>&ndash;%&gt;  <br>
 
 </c:forEach>
 
-<hr>
+<hr>--%>
 LENT TO OTHERS: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
 <c:forEach items="${lendings}" var="l">
 
-    ${l.userTool} | ${l.userTool.description}    --->  to: ${l.user} <a href="/borrowing/return?toReturnId=${l.id}">SEND REQUEST TO RETURN</a> <br>
+    ${l.userTool} | ${l.userTool.description}    --->  to: ${l.user} <a href="/notification/return?toReturnId=${l.id}">SEND REQUEST TO RETURN</a> <br>
 
 </c:forEach>
 

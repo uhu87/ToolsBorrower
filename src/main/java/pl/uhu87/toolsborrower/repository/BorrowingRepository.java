@@ -18,5 +18,6 @@ public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
     List<Borrowing> findAllLentbyLenderId (Long lender_id);
 
     List<Borrowing> findAllByUserToolId(Long id);
+    List<Borrowing> findAllByUserToolIdAndActiveTrue(Long id);
 }
 

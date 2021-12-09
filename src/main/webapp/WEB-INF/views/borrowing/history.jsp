@@ -10,16 +10,10 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2> Aktualnie pożyczona do: </h2>
-<c:forEach items="${borrowing}" var="b">
-    ${b.end}
-</c:forEach>
+<h2>Borrowing history of ${userTool}</h2>
+<c:forEach items="${borrowings}" var="b">
 
-
-<h2>Reservation list of ${userTool}</h2>
-<c:forEach items="${reservations}" var="r">
-
-    ${r.user} | ${r.start} | ${r.end}  <br>
+    ${b.user} | ${b.start} | ${b.end}  <br>
 
 
 </c:forEach>

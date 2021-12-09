@@ -39,13 +39,11 @@ public class ReservationController {
 
     @PostMapping("/make")
     @ResponseBody
-
     public String makeReservationPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
                                       @RequestParam String start, @RequestParam String end){
 
         updateReservationsStatus(toolId);
         List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
-        LocalDate returnDate = borrowingRepository.findFirstByUserToolIdAndActiveTrue(toolId).getEnd();
 
 
         User entityUser = customUser.getUser();
@@ -65,18 +63,21 @@ public class ReservationController {
             if(LocalDate.parse(start).isBefore(LocalDate.now())){
                 return "nie mozna rezerwowac w przeszlosci :D";
             }
-            if(returnDate.isAfter(LocalDate.parse(start))){
-                return "nardzenia chwilowo pozyczone, zostanie oddane "+ returnDate.toString();
+
+        }
+        try {
+            LocalDate returnDate = borrowingRepository.findFirstByUserToolIdAndActiveTrue(toolId).getEnd();
+            if(returnDate.isAfter(LocalDate.parse(start)) | returnDate.isEqual(LocalDate.parse(start)) ){
+                return "nardzenia chwilowo pozyczone, zostanie oddane "+ returnDate.toString() + "wybierz inna date rezerwacji";
             }
-            if(returnDate.isEqual(LocalDate.parse(start))){
+            if(returnDate.isEqual(LocalDate.parse(start))| returnDate.isEqual(LocalDate.parse(start)) ){
                 return "Dnia"+ returnDate.toString() +" inny uzytkownik oddaje narzedzie, skontaktuje sie z wlasciwielem zeby ustalic szczegoly";
             }
-        }
+        } catch (NullPointerException e){};
 
-        // save
         reservationRepository.save(reservation);
-        //return "redirect:/reservation/reservationList?toolId="+toolId;
-        return "yz OKE";
+
+        return "redirect:/reservation/reservationList?toolId="+toolId;
     }
 
     @GetMapping("/reservationList")
@@ -84,12 +85,13 @@ public class ReservationController {
 
         updateReservationsStatus(toolId);
 
+        List<Borrowing> activeBorrowings = borrowingRepository.findAllByUserToolIdAndActiveTrue(toolId);
         List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
         model.addAttribute("userTool", userToolRepository.getById(toolId));
         model.addAttribute("reservations", allReservationsActive);
+        model.addAttribute("borrowing", activeBorrowings);
         return "reservation/reservationList";
     }
-
 
 
     public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
@@ -109,4 +111,33 @@ public class ReservationController {
     }
 
 
+    @GetMapping("/myReservations")
+    public String showMyReservations(Model model, @AuthenticationPrincipal CurrentUser customUser) {
+
+
+        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrue(customUser.getUser());
+
+        model.addAttribute("reservations", myReservations);
+        return "reservation/myReservations";
+    }
+
+
+    @GetMapping("/cancel")
+    public String cancelReservation(Model model, @RequestParam("reservationId") Long reservationId){
+
+        Reservation reservation = reservationRepository.getById(reservationId);
+        model.addAttribute("reservation", reservation);
+        return "reservation/cancel";
+    }
+
+    @PostMapping("/cancel")
+    public String cancelReservationPost(@RequestParam String confirmed, @RequestParam Long reservationId){
+        Reservation reservation = reservationRepository.getById(reservationId);
+        if(confirmed.equals("yes")){
+            reservation.setActive(false);
+            reservationRepository.save(reservation);
+            return "redirect:/reservation/myReservations";
+        }
+        return "redirect:/reservation/myReservations";
+    }
 }

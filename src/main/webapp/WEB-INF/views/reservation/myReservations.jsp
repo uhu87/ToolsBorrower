@@ -10,16 +10,12 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2> Aktualnie pożyczona do: </h2>
-<c:forEach items="${borrowing}" var="b">
-    ${b.end}
-</c:forEach>
+<h2>My reservations${userTool}</h2>
 
-
-<h2>Reservation list of ${userTool}</h2>
 <c:forEach items="${reservations}" var="r">
 
-    ${r.user} | ${r.start} | ${r.end}  <br>
+    ${r.userTool} | ${r.start} | ${r.end}  from ---> ${r.userTool.user} |
+    <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a><br>
 
 
 </c:forEach>

@@ -21,6 +21,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     @Query(value = "select * from reservation where reservation.user_tool_id = :givenId and active=true order by start limit 1", nativeQuery = true)
     Reservation findEarliestActiveReservation (@Param("givenId") Long id);
 
-
+    List <Reservation> findAllByUserAndActiveTrue (User user);
 
 }

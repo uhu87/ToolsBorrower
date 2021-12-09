@@ -2,6 +2,7 @@ package pl.uhu87.toolsborrower.entity;
 
 
 import javax.persistence.*;
+import java.awt.*;
 import java.time.LocalDate;
 
 @Entity
@@ -20,17 +21,19 @@ public class Borrowing {
 
     private boolean active = true;
 
-    private LocalDate start;
+    private LocalDate start = LocalDate.now();
     private LocalDate end;
 
+    private String reminder;
 
-    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate Start, LocalDate end) {
+
+    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate start, LocalDate end) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
         this.active = active;
         this.end = end;
-        this.start = LocalDate.now();
+        this.start = start;
     }
 
     public Borrowing() {
@@ -83,5 +86,13 @@ public class Borrowing {
 
     public void setEnd(LocalDate end) {
         this.end = end;
+    }
+
+    public String getReminder() {
+        return reminder;
+    }
+
+    public void setReminder(String reminder) {
+        this.reminder = reminder;
     }
 }
