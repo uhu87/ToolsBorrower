@@ -25,9 +25,10 @@ public class Borrowing {
     private LocalDate end;
 
     private String notification;
+    private String comment;
 
 
-    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate start, LocalDate end, String notification) {
+    public Borrowing(Long id, UserTool userTool, User user, boolean active, LocalDate start, LocalDate end, String notification, String comment) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
@@ -35,6 +36,7 @@ public class Borrowing {
         this.end = end;
         this.start = start;
         this.notification = notification;
+        this.comment = comment;
     }
 
     public Borrowing() {
@@ -95,5 +97,13 @@ public class Borrowing {
 
     public void setNotification(String notification) {
         this.notification = notification;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

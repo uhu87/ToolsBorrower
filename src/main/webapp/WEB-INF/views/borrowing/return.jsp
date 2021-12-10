@@ -10,6 +10,7 @@
     Czy chcesz oddac ${borrowing.userTool} pozyczona od ${borrowing.userTool.user}<br/>
     <br>
    <input type="hidden" path="toReturnId" value="${borrowing.id}"> <br/>
+    Komentarz/Uwagi:<input type="text" value="" name="comment"/><br/>
 
     <button> <input type="submit" value="RETURN"> </button><br/>
 

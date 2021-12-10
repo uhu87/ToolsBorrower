@@ -13,7 +13,7 @@
 <h2>Borrowing history of ${userTool}</h2>
 <c:forEach items="${borrowings}" var="b">
 
-    ${b.user} | ${b.start} | ${b.end}  <br>
+    ${b.user} | ${b.start} | ${b.end} | ${b.comment}<br>
 
 
 </c:forEach>

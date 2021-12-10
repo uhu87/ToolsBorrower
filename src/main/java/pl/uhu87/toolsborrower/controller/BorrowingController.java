@@ -88,11 +88,12 @@ public class BorrowingController {
 
     }
     @PostMapping("/return")
-    public String confirmReturn(@RequestParam Long toReturnId){
+    public String confirmReturn(@RequestParam Long toReturnId, @RequestParam String comment){
 
         Borrowing borrowing = borrowingRepository.getById(toReturnId);
         borrowing.setActive(false);
         borrowing.getUserTool().setAvailable(true);
+        borrowing.setComment(comment);
         borrowingRepository.save(borrowing);            // UPDATE!!!!! :D
         UserTool userTool = userToolRepository.getById(borrowing.getUserTool().getId());
         userToolRepository.save(userTool);
@@ -101,20 +102,11 @@ public class BorrowingController {
     }
 
 
-  /*  @GetMapping("/borrowingOverlap")
-
-    public  String  borrowingOverlap(@RequestParam("returnDate") String returnDate, Model model){
-        model.addAttribute("returnDate", returnDate);
-
-      return "reservation/borrowingOverlap";
-    }*/
-
-
     @GetMapping("/history")
     public String borrowingHistory(@RequestParam("toolId") Long toolId, Model model){
 
         UserTool userTool = userToolRepository.getById(toolId);
-        List<Borrowing> borrowings = borrowingRepository.findAllByUserToolId(toolId);
+        List<Borrowing> borrowings = borrowingRepository.findAllByUserToolIdOrderByEndDesc(toolId);
         model.addAttribute("borrowings", borrowings);
         model.addAttribute("userTool", userTool);
         return "borrowing/history";
