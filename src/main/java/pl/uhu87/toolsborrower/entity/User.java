@@ -28,15 +28,21 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
 
+    private String phone;
+    private String email;
+    private boolean active = true;
 
     public User(){}
 
-    public User(Long id, String username, String password, int enabled, Set<Role> roles) {
+    public User(Long id, String username, String password, int enabled, Set<Role> roles, String phone,String email, boolean active) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+        this.phone = phone;
+        this.email = email;
+        this.active= active;
     }
 
     public String getUsername() {
@@ -59,12 +65,36 @@ public class User {
         return enabled;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public void setEnabled(int enabled) {
         this.enabled = enabled;
     }
 
     public Set<Role> getRoles() {
         return roles;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setRoles(Set<Role> roles) {

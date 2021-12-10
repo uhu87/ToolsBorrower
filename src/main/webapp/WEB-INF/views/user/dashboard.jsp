@@ -6,6 +6,7 @@
 <strong><a href="/logout1">LOG OUT</a></strong><br>
 <strong><a href="/tool/addUserTool">ADD TOOL</a></strong><br>
 <strong><a href="/reservation/myReservations">MY RESERVATIONS</a></strong><br>
+<strong><a href="/user/edit">EDYTUJ DANE</a></strong><br>
 
 <h2>WITAJ <sec:authentication property="principal.username"/></h2>
 
@@ -54,3 +55,24 @@ BORROWED FROM OTHERS: <br>
 </c:forEach>
 
 <hr>
+
+<h2>MY RESERVATIONS </h2>
+
+<c:forEach items="${reservations}" var="r">
+
+    ${r.userTool} | ${r.start} | ${r.end}  | od: <a href="/user/userTools/${r.userTool.user.id}">${r.userTool.user}</a>  |
+    <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a>
+    <c:if test="${r.notification != null}">
+        |  ${r.notification}
+    </c:if>
+
+    <c:if test="${r.reservationDayOn == true}">
+        |  <a href="/borrowing/createFromReservation/${r.id}">BORROW</a>
+    </c:if>
+    <br>
+    <c:if test="${r.ownerInfo != null}">
+        |  ${r.ownerInfo}
+    </c:if>
+    <br>
+</c:forEach>
+

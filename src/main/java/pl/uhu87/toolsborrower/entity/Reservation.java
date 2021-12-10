@@ -23,11 +23,23 @@ public class Reservation {
     private boolean active = true;
 
     private String notification;
+    private String ownerInfo;
+    private boolean reservationDayOn = false;
 
     public Reservation() {
     }
 
-    public Reservation(Long id, UserTool userTool, User user, LocalDate start, LocalDate end, boolean active, String notification) {
+    public String getOwnerInfo() {
+        return ownerInfo;
+    }
+
+    public void setOwnerInfo(String ownerInfo) {
+        this.ownerInfo = ownerInfo;
+    }
+
+    public Reservation(Long id, UserTool userTool, User user, LocalDate start,
+                       LocalDate end, boolean active, String notification,
+                       boolean reservationDayOn, String ownerInfo) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
@@ -35,6 +47,8 @@ public class Reservation {
         this.end = end;
         this.active = active;
         this.notification = notification;
+        this.reservationDayOn = reservationDayOn;
+        this.ownerInfo = ownerInfo;
     }
 
     public Long getId() {
@@ -67,6 +81,14 @@ public class Reservation {
 
     public void setStart(LocalDate start) {
         this.start = start;
+    }
+
+    public boolean isReservationDayOn() {
+        return reservationDayOn;
+    }
+
+    public void setReservationDayOn(boolean reservationDayOn) {
+        this.reservationDayOn = reservationDayOn;
     }
 
     public LocalDate getEnd() {

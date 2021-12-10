@@ -16,10 +16,10 @@
     lastname:<form:input path="lastName"/><br/>
     phone:<form:input path="phone"/><br/>
     email:<form:input path="email"/><br/>
-    password: <form:input path="password"/><br/>
+    password: <input type="password" name="password"/><br/>
 
 
-    <input type="submit" value="REGISTER"><br/>
+    <input type="submit" value="SAVE"><br/>
 
 </form:form>
 

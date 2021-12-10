@@ -113,6 +113,28 @@ public class BorrowingController {
     }
 
 
+    @GetMapping("/createFromReservation/{id}")
+    public String createFromBorrowing(@PathVariable("id") Long reservationId, Model model){
+
+        Reservation reservation = reservationRepository.getById(reservationId);
+        model.addAttribute("reservation", reservation);
+        return "borrowing/createFromReservation";
+    }
+
+    @PostMapping("/createFromReservation/{id}")
+    public String createFromBorrowingPost(@PathVariable("id") Long reservationId, Model model){
+
+        Reservation reservation = reservationRepository.getById(reservationId);
+        UserTool userTool = userToolRepository.getById(reservation.getUserTool().getId());
+        Borrowing borrowing = new Borrowing();
+        borrowing.setEnd(reservation.getEnd());
+        borrowing.setUserTool(reservation.getUserTool());
+        borrowing.setUser(reservation.getUser());
+        reservation.setActive(false);
+        userTool.setAvailable(false);
+        borrowingRepository.save(borrowing);
+        return "redirect:/user/dashboard";
+    }
 
 
     public void updateReservationsStatus(Long toolId){

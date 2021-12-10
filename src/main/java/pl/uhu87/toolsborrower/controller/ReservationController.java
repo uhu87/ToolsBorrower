@@ -38,7 +38,6 @@ public class ReservationController {
 
 
     @PostMapping("/make")
-    @ResponseBody
     public String makeReservationPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
                                       @RequestParam String start, @RequestParam String end){
 
@@ -77,7 +76,7 @@ public class ReservationController {
 
         reservationRepository.save(reservation);
 
-        return "redirect:/reservation/reservationList?toolId="+toolId;
+        return "redirect:/reservation/userReservationList?toolId="+toolId;
     }
 
     @GetMapping("/reservationList")
@@ -92,12 +91,23 @@ public class ReservationController {
         model.addAttribute("borrowing", activeBorrowings);
         return "reservation/reservationList";
     }
+    @GetMapping("/userReservationList")
+    public String showAllUserReservations(Model model, @RequestParam Long toolId) {
+
+        updateReservationsStatus(toolId);
+
+        List<Borrowing> activeBorrowings = borrowingRepository.findAllByUserToolIdAndActiveTrue(toolId);
+        List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
+        model.addAttribute("userTool", userToolRepository.getById(toolId));
+        model.addAttribute("reservations", allReservationsActive);
+        model.addAttribute("borrowing", activeBorrowings);
+        return "reservation/userReservationList";
+    }
+
 
 
     public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-
         return !start1.isAfter(end2) && !start2.isAfter(end1);
-
     }
 
     public void updateReservationsStatus(Long toolId){
@@ -115,7 +125,7 @@ public class ReservationController {
     public String showMyReservations(Model model, @AuthenticationPrincipal CurrentUser customUser) {
 
 
-        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrue(customUser.getUser());
+        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
 
         model.addAttribute("reservations", myReservations);
         return "reservation/myReservations";

@@ -10,17 +10,21 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2>My reservations </h2>
+<h3>
+    <c:forEach items="${borrowing}" var="b">
+        Aktualnie pożyczona do ${b.end}
+    </c:forEach>
+</h3>
 
+<c:if test="${reservations.size()==0}">
+    BRAK REZERWACJI
+</c:if>
+<c:if test="${reservations.size()!=0}">
+<h2>Reservation list of ${userTool}</h2>
 <c:forEach items="${reservations}" var="r">
 
-    ${r.userTool} | ${r.start} | ${r.end}  | od: <a href="/user/userTools/${r.userTool.user.id}">${r.userTool.user}</a>  |
-    <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a>
-    <c:if test="${r.ownerInfo != null}">
-        |  ${r.ownerInfo}
-    </c:if>
-
-    <br>
-
+    <a href="/user/userTools/${r.user.id}">${r.user}</a> | ${r.start} | ${r.end} <br>
 
 </c:forEach>
+
+</c:if>

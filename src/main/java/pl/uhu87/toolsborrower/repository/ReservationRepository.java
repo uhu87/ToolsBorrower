@@ -22,5 +22,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     Reservation findEarliestActiveReservation (@Param("givenId") Long id);
 
     List <Reservation> findAllByUserAndActiveTrue (User user);
+    List <Reservation> findAllByUserAndActiveTrueOrderByStartAsc (User user);
 
 }

@@ -6,13 +6,19 @@
 <strong><a href="/user/dashboard">MY ACCOUNT</a></strong><br>
 
 <h2>${user.firstName}'s TOOLS</h2>
+<c:if test="${user.phone !=null}">
+Telefon: ${user.phone}
+</c:if> |
+<c:if test="${user.email !=null}">
+Email: ${user.email}
+</c:if>
 
 <hr>
 ALL TOOLS: <br>
 <c:forEach items="${userTools}" var="uT">
 
     ${uT.tool} | ${uT.description} | <a href="/reservation/make?toolId=${uT.id}">MAKE RESERVATION</a>
-    | <a href="/reservation/reservationList?toolId=${uT.id}">CHECK RESERVATIONS</a>
+    | <a href="/reservation/userReservationList?toolId=${uT.id}">CHECK RESERVATIONS</a>
     <br>
 
 </c:forEach>
@@ -25,8 +31,8 @@ AVAILABLE: <br>
 
 </c:forEach>
 
-<hr>
-LENT TO OTHERS: (widok za zakrycia) <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
+<%--<hr>
+LENT TO OTHERS: (widok za zakrycia) <br>                                    &lt;%&ndash;// mozna potem wykorzystywac na bazie borrowingsow//&ndash;%&gt;
 <c:forEach items="${userToolsLent}" var="uTL">
 
     ${uTL.tool} <br>
@@ -40,6 +46,6 @@ BORROWED FROM OTHERS: (widok za zakrycia) <br>
    ${b.userTool}   <br>
     --->  from: ${b.userTool.user}
 
-</c:forEach>
+</c:forEach>--%>
 
 <hr>

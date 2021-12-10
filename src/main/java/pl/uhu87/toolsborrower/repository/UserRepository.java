@@ -14,6 +14,7 @@ public interface UserRepository extends JpaRepository <User, Long> {
 
     User findByUsername(String username);
 
-    @Query("select u from User u where u.id NOT like :givenId")
-    List <User> findAllbutLogged (@Param("givenId") Long id);
+    @Query("select u from User u where u.id NOT like :givenId and u.active=true")
+    List <User> findAllActiveButLogged (@Param("givenId") Long id);
+
 }
