@@ -25,8 +25,8 @@ AVAILABLE: <br>
 
 </c:forEach>
 
-<hr>
-LENT TO OTHERS: (widok za zakrycia) <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
+<%--<hr>
+LENT TO OTHERS: (widok za zakrycia) <br>                                    &lt;%&ndash;// mozna potem wykorzystywac na bazie borrowingsow//&ndash;%&gt;
 <c:forEach items="${userToolsLent}" var="uTL">
 
     ${uTL.tool} <br>
@@ -40,6 +40,6 @@ BORROWED FROM OTHERS: (widok za zakrycia) <br>
    ${b.userTool}   <br>
     --->  from: ${b.userTool.user}
 
-</c:forEach>
+</c:forEach>--%>
 
 <hr>

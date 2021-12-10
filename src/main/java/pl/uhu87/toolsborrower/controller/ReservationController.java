@@ -92,6 +92,18 @@ public class ReservationController {
         model.addAttribute("borrowing", activeBorrowings);
         return "reservation/reservationList";
     }
+    @GetMapping("/userReservationList")
+    public String showAllUserReservations(Model model, @RequestParam Long toolId) {
+
+        updateReservationsStatus(toolId);
+
+        List<Borrowing> activeBorrowings = borrowingRepository.findAllByUserToolIdAndActiveTrue(toolId);
+        List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
+        model.addAttribute("userTool", userToolRepository.getById(toolId));
+        model.addAttribute("reservations", allReservationsActive);
+        model.addAttribute("borrowing", activeBorrowings);
+        return "reservation/userReservationList";
+    }
 
 
 
