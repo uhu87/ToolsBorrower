@@ -114,7 +114,6 @@ public class BorrowingController {
 
 
 
-
     public void updateReservationsStatus(Long toolId){
         List<Reservation> allReservations = reservationRepository.findAllByUserToolIdOrderByStart(toolId);
         for(Reservation r : allReservations){

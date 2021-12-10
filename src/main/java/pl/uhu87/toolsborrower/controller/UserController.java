@@ -1,7 +1,6 @@
 package pl.uhu87.toolsborrower.controller;
 
 
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -9,49 +8,50 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.UserService;
 import pl.uhu87.toolsborrower.entity.*;
-import pl.uhu87.toolsborrower.repository.BorrowingRepository;
-import pl.uhu87.toolsborrower.repository.ToolRepository;
-import pl.uhu87.toolsborrower.repository.UserRepository;
-import pl.uhu87.toolsborrower.repository.UserToolRepository;
+import pl.uhu87.toolsborrower.repository.*;
 
 
-import javax.persistence.EntityManager;
-import javax.swing.text.html.parser.Entity;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
 
-        private final UserRepository userRepository;
-        private final UserToolRepository userToolRepository;
-        private final ToolRepository toolRepository;
-        private final BorrowingRepository borrowingRepository;
-        private final UserService userService;
+    private final UserRepository userRepository;
+    private final UserToolRepository userToolRepository;
+    private final ToolRepository toolRepository;
+    private final BorrowingRepository borrowingRepository;
+    private final UserService userService;
+    private final ReservationRepository reservationRepository;
 
-    public UserController(UserRepository userRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, BorrowingRepository borrowingRepository, UserService userService) {
+    public UserController(UserRepository userRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, BorrowingRepository borrowingRepository, UserService userService, ReservationRepository reservationRepository) {
         this.userRepository = userRepository;
         this.userToolRepository = userToolRepository;
         this.toolRepository = toolRepository;
         this.borrowingRepository = borrowingRepository;
         this.userService = userService;
+        this.reservationRepository = reservationRepository;
     }
 
     @GetMapping("/all")
-    public String allUsers(Model model, @AuthenticationPrincipal CurrentUser currentUser){
+    public String allUsers(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
 
         model.addAttribute("users", userRepository.findAll());
         return "user/allUsers";
     }
+
     @GetMapping("/allButLogged")
-    public String allUsersButLogged(Model model, @AuthenticationPrincipal CurrentUser currentUser){
+    public String allUsersButLogged(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
 
         model.addAttribute("users", userRepository.findAllbutLogged(currentUser.getUser().getId()));
         return "user/allUsersButLogged";
     }
 
     @GetMapping("/userTools/{userId}")
-    public String allToolsByUser(Model model, @PathVariable("userId") Long userId){
+    public String allToolsByUser(Model model, @PathVariable("userId") Long userId) {
 
 
         User user = userRepository.getById(userId);
@@ -67,17 +67,9 @@ public class UserController {
 
 
     @ModelAttribute("userTools")
-    public List<UserTool> userTools(){
+    public List<UserTool> userTools() {
         return userToolRepository.findAll();
     }
-
-  /*  @GetMapping("/user")
-    @ResponseBody
-    public String admin(@AuthenticationPrincipal CurrentUser customUser) {
-        User entityUser = customUser.getUser();
-        return "Hello " + entityUser.getUsername() + "\n" +
-                entityUser.getFirstName() + " " + entityUser.getLastName() + entityUser.getId();
-    }*/
 
 
     @GetMapping("/create-user")
@@ -99,6 +91,24 @@ public class UserController {
         model.addAttribute("userTools", userToolRepository.findAllByUserAndPresentTrue(user));
         model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
 
+
+        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
+        //List <Reservation> updatedReservations = new ArrayList<>();
+        for (Reservation r : myReservations) {
+            if (LocalDate.now().isAfter(r.getStart())) {
+                r.setActive(false);
+                reservationRepository.save(r);
+            } if(LocalDate.now().isEqual(r.getStart())){
+                r.setNotification("Masz dziś rezerwację");
+                reservationRepository.save(r);
+            }
+            //updatedReservations.add(r);
+        }
+        List<Reservation> updatedReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
+
+        model.addAttribute("reservations", updatedReservations);
+
+
         List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(entityUser.getId());        // miejsce na streama
         model.addAttribute("borrowings", borrowings);
 
@@ -113,11 +123,23 @@ public class UserController {
     @ModelAttribute("currentUser")
     public String userInfo(@AuthenticationPrincipal UserDetails customUser) {
 
-        if (customUser == null){
+        if (customUser == null) {
             return "Widok dostepny dla wszystkich";
         }
         // log.info("customUser class {} " , customUser.getClass());
         return customUser.getUsername();
     }
 
+
+/*    public List<Reservation> updateMyReservations(List<Reservation> reservations) {
+         List <Reservation> updatedReservations = new ArrayList<>();
+        for (Reservation r : reservations) {
+            if (LocalDate.now().isAfter(r.getStart())) {
+                r.setActive(false);
+                reservationRepository.save(r);
+            } updatedReservations.add(r);
+
+        }return updatedReservations;
+
+    }*/
 }

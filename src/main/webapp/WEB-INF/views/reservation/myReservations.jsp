@@ -10,7 +10,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2>My reservations${userTool}</h2>
+<h2>My reservations </h2>
 
 <c:forEach items="${reservations}" var="r">
 

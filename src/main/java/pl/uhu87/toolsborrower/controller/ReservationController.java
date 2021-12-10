@@ -115,7 +115,7 @@ public class ReservationController {
     public String showMyReservations(Model model, @AuthenticationPrincipal CurrentUser customUser) {
 
 
-        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrue(customUser.getUser());
+        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
 
         model.addAttribute("reservations", myReservations);
         return "reservation/myReservations";

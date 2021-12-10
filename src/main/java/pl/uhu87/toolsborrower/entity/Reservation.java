@@ -24,10 +24,12 @@ public class Reservation {
 
     private String notification;
 
+    private boolean reservationDayOn = false;
+
     public Reservation() {
     }
 
-    public Reservation(Long id, UserTool userTool, User user, LocalDate start, LocalDate end, boolean active, String notification) {
+    public Reservation(Long id, UserTool userTool, User user, LocalDate start, LocalDate end, boolean active, String notification, boolean reservationDayOn) {
         this.id = id;
         this.userTool = userTool;
         this.user = user;
@@ -35,6 +37,7 @@ public class Reservation {
         this.end = end;
         this.active = active;
         this.notification = notification;
+        this.reservationDayOn = reservationDayOn;
     }
 
     public Long getId() {
@@ -67,6 +70,14 @@ public class Reservation {
 
     public void setStart(LocalDate start) {
         this.start = start;
+    }
+
+    public boolean isReservationDayOn() {
+        return reservationDayOn;
+    }
+
+    public void setReservationDayOn(boolean reservationDayOn) {
+        this.reservationDayOn = reservationDayOn;
     }
 
     public LocalDate getEnd() {

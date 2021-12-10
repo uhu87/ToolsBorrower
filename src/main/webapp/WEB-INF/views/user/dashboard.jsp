@@ -54,3 +54,15 @@ BORROWED FROM OTHERS: <br>
 </c:forEach>
 
 <hr>
+
+<h2>MY RESERVATIONS </h2>
+
+<c:forEach items="${reservations}" var="r">
+
+    ${r.userTool} | ${r.start} | ${r.end}  | od: <a href="/user/userTools/${r.userTool.user.id}">${r.userTool.user}</a>  |
+    <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a>
+    <c:if test="${r.notification != null}">
+        |  ${r.notification}
+    </c:if>
+    <br>
+</c:forEach>
