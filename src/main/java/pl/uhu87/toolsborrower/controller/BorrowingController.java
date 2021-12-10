@@ -122,7 +122,6 @@ public class BorrowingController {
     }
 
     @PostMapping("/createFromReservation/{id}")
-    @ResponseBody
     public String createFromBorrowingPost(@PathVariable("id") Long reservationId, Model model){
 
         Reservation reservation = reservationRepository.getById(reservationId);
@@ -134,9 +133,8 @@ public class BorrowingController {
         reservation.setActive(false);
         userTool.setAvailable(false);
         borrowingRepository.save(borrowing);
-        return ""+borrowing;
+        return "redirect:/user/dashboard";
     }
-
 
 
     public void updateReservationsStatus(Long toolId){

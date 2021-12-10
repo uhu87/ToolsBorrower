@@ -38,7 +38,6 @@ public class ReservationController {
 
 
     @PostMapping("/make")
-    @ResponseBody
     public String makeReservationPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
                                       @RequestParam String start, @RequestParam String end){
 
@@ -77,7 +76,7 @@ public class ReservationController {
 
         reservationRepository.save(reservation);
 
-        return "redirect:/reservation/reservationList?toolId="+toolId;
+        return "redirect:/reservation/userReservationList?toolId="+toolId;
     }
 
     @GetMapping("/reservationList")

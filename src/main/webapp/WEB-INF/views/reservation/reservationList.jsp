@@ -10,17 +10,23 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2> Aktualnie pożyczona do: </h2>
+<h3>
 <c:forEach items="${borrowing}" var="b">
-    ${b.end}
+    Aktualnie pożyczona do ${b.end}
 </c:forEach>
+</h3>
+
+<c:if test="${reservations.size()==0}">
+    BRAK REZERWACJI
+</c:if>
+<c:if test="${reservations.size()!=0}">
+
+    <h3>Reservation list of ${userTool}</h3>
+    <c:forEach items="${reservations}" var="r">
+        <a href="/user/userTools/${r.user.id}">${r.user}</a> | ${r.start} | ${r.end} | <a href="/notification/ownerInfo?reservationId=${r.id}">SEND INFO</a> <br>
+        <br>
+    </c:forEach>
 
 
-<h2>Reservation list of ${userTool}</h2>
-<c:forEach items="${reservations}" var="r">
+</c:if>
 
-    <a href="/user/userTools/${r.user.id}">${r.user}</a> | ${r.start} | ${r.end} | <a href="/notification/ownerInfo?reservationId=${r.id}">SEND INFO</a> <br>
-    <br>
-
-
-</c:forEach>

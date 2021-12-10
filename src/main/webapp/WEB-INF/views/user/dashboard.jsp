@@ -6,6 +6,7 @@
 <strong><a href="/logout1">LOG OUT</a></strong><br>
 <strong><a href="/tool/addUserTool">ADD TOOL</a></strong><br>
 <strong><a href="/reservation/myReservations">MY RESERVATIONS</a></strong><br>
+<strong><a href="/user/edit">EDYTUJ DANE</a></strong><br>
 
 <h2>WITAJ <sec:authentication property="principal.username"/></h2>
 

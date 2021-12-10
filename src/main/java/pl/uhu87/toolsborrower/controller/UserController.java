@@ -46,7 +46,7 @@ public class UserController {
     @GetMapping("/allButLogged")
     public String allUsersButLogged(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
 
-        model.addAttribute("users", userRepository.findAllbutLogged(currentUser.getUser().getId()));
+        model.addAttribute("users", userRepository.findAllActiveButLogged(currentUser.getUser().getId()));
         return "user/allUsersButLogged";
     }
 
@@ -119,6 +119,25 @@ public class UserController {
         return "user/dashboard";
 
     }
+
+    @GetMapping("/edit")
+    public String editData(@AuthenticationPrincipal CurrentUser customUser, Model model){
+        User entityUser = customUser.getUser();
+        User user = userRepository.getById(entityUser.getId());
+        model.addAttribute("user", user);
+
+        return "user/edit";
+    }
+    @PostMapping("/edit")
+    public String editDataPost(@ModelAttribute("user") User user, @RequestParam String password){
+        user.setPassword(password);
+        userService.saveUser(user);
+
+        return "redirect:/user/dashboard";
+    }
+
+
+
 
 
     @ModelAttribute("currentUser")

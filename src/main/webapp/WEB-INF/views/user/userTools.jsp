@@ -6,6 +6,12 @@
 <strong><a href="/user/dashboard">MY ACCOUNT</a></strong><br>
 
 <h2>${user.firstName}'s TOOLS</h2>
+<c:if test="${user.phone !=null}">
+Telefon: ${user.phone}
+</c:if> |
+<c:if test="${user.email !=null}">
+Email: ${user.email}
+</c:if>
 
 <hr>
 ALL TOOLS: <br>
