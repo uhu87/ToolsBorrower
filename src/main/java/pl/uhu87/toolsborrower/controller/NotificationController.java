@@ -10,7 +10,7 @@ import pl.uhu87.toolsborrower.repository.*;
 
 @Controller
 @RequestMapping("/notification")
-public class Notification {
+public class NotificationController {
 
     private final BorrowingRepository borrowingRepository;
     private final UserToolRepository userToolRepository;
@@ -18,7 +18,7 @@ public class Notification {
     private final UserRepository userRepository;
     private final ReservationRepository reservationRepository;
 
-    public Notification(BorrowingRepository borrowingRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, UserRepository userRepository, ReservationRepository reservationRepository) {
+    public NotificationController(BorrowingRepository borrowingRepository, UserToolRepository userToolRepository, ToolRepository toolRepository, UserRepository userRepository, ReservationRepository reservationRepository) {
         this.borrowingRepository = borrowingRepository;
         this.userToolRepository = userToolRepository;
         this.toolRepository = toolRepository;
