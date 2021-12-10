@@ -47,18 +47,18 @@ public class NotificationController {
 
 
     //-------------------------------------infromation for reservation---------------------------
-    @GetMapping("/information")
+    @GetMapping("/ownerInfo")
 
     public String sendInformation(@RequestParam Long reservationId, Model model){
 
-        return "notification/information";
+        return "notification/ownerInfo";
     }
 
-    @PostMapping("/information")
+    @PostMapping("/ownerInfo")
 
-    public String sendInformationPost(@RequestParam Long reservationId, @RequestParam String information){
+    public String sendInformationPost(@RequestParam Long reservationId, @RequestParam String ownerInfo){
         Reservation reservation = reservationRepository.getById(reservationId);
-        reservation.setNotification(information);
+        reservation.setOwnerInfo(ownerInfo);
         reservationRepository.save(reservation);
 
         return "redirect:/user/dashboard";

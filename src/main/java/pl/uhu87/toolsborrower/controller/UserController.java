@@ -100,6 +100,7 @@ public class UserController {
                 reservationRepository.save(r);
             } if(LocalDate.now().isEqual(r.getStart())){
                 r.setNotification("Masz dziś rezerwację");
+                r.setReservationDayOn(true);
                 reservationRepository.save(r);
             }
             //updatedReservations.add(r);

@@ -64,5 +64,14 @@ BORROWED FROM OTHERS: <br>
     <c:if test="${r.notification != null}">
         |  ${r.notification}
     </c:if>
+
+    <c:if test="${r.reservationDayOn == true}">
+        |  <a href="/borrowing/createFromReservation/${r.id}">BORROW</a>
+    </c:if>
+    <br>
+    <c:if test="${r.ownerInfo != null}">
+        |  ${r.ownerInfo}
+    </c:if>
     <br>
 </c:forEach>
+

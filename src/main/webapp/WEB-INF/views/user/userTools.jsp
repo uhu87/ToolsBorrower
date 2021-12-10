@@ -12,7 +12,7 @@ ALL TOOLS: <br>
 <c:forEach items="${userTools}" var="uT">
 
     ${uT.tool} | ${uT.description} | <a href="/reservation/make?toolId=${uT.id}">MAKE RESERVATION</a>
-    | <a href="/reservation/reservationList?toolId=${uT.id}">CHECK RESERVATIONS</a>
+    | <a href="/reservation/userReservationList?toolId=${uT.id}">CHECK RESERVATIONS</a>
     <br>
 
 </c:forEach>

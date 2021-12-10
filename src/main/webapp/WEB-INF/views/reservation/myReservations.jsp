@@ -16,8 +16,8 @@
 
     ${r.userTool} | ${r.start} | ${r.end}  | od: <a href="/user/userTools/${r.userTool.user.id}">${r.userTool.user}</a>  |
     <a href="/reservation/cancel?reservationId=${r.id}">ANULUJ</a>
-    <c:if test="${r.notification != null}">
-        |  ${r.notification}
+    <c:if test="${r.ownerInfo != null}">
+        |  ${r.ownerInfo}
     </c:if>
 
     <br>

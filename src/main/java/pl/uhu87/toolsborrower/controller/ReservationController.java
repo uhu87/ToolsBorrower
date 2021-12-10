@@ -94,10 +94,9 @@ public class ReservationController {
     }
 
 
+
     public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
-
         return !start1.isAfter(end2) && !start2.isAfter(end1);
-
     }
 
     public void updateReservationsStatus(Long toolId){
