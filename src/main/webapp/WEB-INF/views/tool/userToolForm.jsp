@@ -12,6 +12,8 @@
     Tool: <form:select path="tool.id" items="${tools}" itemLabel="name" itemValue="id"/><br/>
 
     Description:<form:input path="description"/><br/>
+    <form:errors path="description"/><br/>
+
     <input type="submit" value="SAVE TOOL"><br/>
 
 </form:form>

@@ -4,6 +4,7 @@ package pl.uhu87.toolsborrower.controller;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.entity.CurrentUser;
 import pl.uhu87.toolsborrower.entity.Tool;
@@ -13,7 +14,7 @@ import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 import pl.uhu87.toolsborrower.repository.UserToolRepository;
 
-
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -54,7 +55,11 @@ public class ToolController {
     }
 
     @PostMapping("/addUserTool")
-    public String addUserToolPost(@ModelAttribute("userTool") UserTool userTool, @AuthenticationPrincipal CurrentUser currentUser){
+    public String addUserToolPost(@ModelAttribute("userTool") @Valid UserTool userTool,BindingResult result,
+                                  @AuthenticationPrincipal CurrentUser currentUser){
+        if(result.hasErrors()){
+            return "tool/userToolForm";
+        }
 
         userTool.setUser(currentUser.getUser());
         userToolRepository.save(userTool);

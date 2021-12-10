@@ -5,12 +5,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.UserService;
 import pl.uhu87.toolsborrower.entity.*;
 import pl.uhu87.toolsborrower.repository.*;
 
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -129,12 +131,27 @@ public class UserController {
         return "user/edit";
     }
     @PostMapping("/edit")
-    public String editDataPost(@ModelAttribute("user") User user, @RequestParam String password){
-        user.setPassword(password);
+    public String editDataPost(@ModelAttribute("user") @Valid User user, BindingResult result){
+        if(result.hasErrors()){
+            return "registration/registration";
+        }
         userService.saveUser(user);
 
         return "redirect:/user/dashboard";
     }
+
+
+/*    @PostMapping("/addUser")
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult result){
+        if(result.hasErrors()){
+            return "registration/registration";
+        }
+        userService.saveUser(user);
+        return "redirect:/login";
+    }*/
+
+
+
 
 
 
