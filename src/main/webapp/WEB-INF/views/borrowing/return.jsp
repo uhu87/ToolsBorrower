@@ -4,10 +4,10 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2>Borrowing details</h2>
+
 <form:form  method="post">
 
-    Czy chcesz oddac ${borrowing.userTool} pozyczona od ${borrowing.userTool.user}<br/>
+    Czy chcesz oddać ${borrowing.userTool} pożyczoną od ${borrowing.userTool.user}<br/>
     <br>
    <input type="hidden" path="toReturnId" value="${borrowing.id}"> <br/>
     Komentarz/Uwagi:<input type="text" value="" name="comment"/><br/>

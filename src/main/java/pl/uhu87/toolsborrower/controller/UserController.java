@@ -140,7 +140,7 @@ public class UserController {
         }
         userService.saveUser(user);
 
-        return "user/userTools";
+        return "redirect:/user/dashboard";
     }
 
 

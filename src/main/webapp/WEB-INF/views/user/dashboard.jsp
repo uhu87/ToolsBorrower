@@ -5,13 +5,12 @@
 <strong><a href="/user/allButLogged">ALL USERS</a></strong><br>
 <strong><a href="/logout1">LOG OUT</a></strong><br>
 <strong><a href="/tool/addUserTool">ADD TOOL</a></strong><br>
-<strong><a href="/reservation/myReservations">MY RESERVATIONS</a></strong><br>
 <strong><a href="/user/edit">EDYTUJ DANE</a></strong><br>
 
 <h2>WITAJ <sec:authentication property="principal.username"/></h2>
 
 <hr>
-ALL TOOLS: <br>
+<h2>WSZYSTKIE NARZĘDZIA:</h2><br>
 <c:forEach items="${userTools}" var="uT">
 
     ${uT.tool} | ${uT.description} | <a href="/tool/editUserTool?idToEdit=${uT.id}">EDIT</a>
@@ -32,20 +31,19 @@ ALL TOOLS: <br>
 </c:forEach>
 
 <hr>--%>
-LENT TO OTHERS: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
+POŻYCZONE INNYM: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
 <c:forEach items="${lendings}" var="l">
 
-    ${l.userTool} | ${l.userTool.description}    ---> to: ${l.user} <a href="/notification/return?toReturnId=${l.id}">SEND
-    REQUEST TO RETURN</a> <br>
+    ${l.userTool} | ${l.userTool.description}    ---> DLA: ${l.user} <a href="/notification/return?toReturnId=${l.id}">WYSLIJ INFO</a> <br>
 
 </c:forEach>
 
 <hr>
-BORROWED FROM OTHERS: <br>
+POŻYCZONE OD INNYCH: <br>
 <c:forEach items="${borrowings}" var="b">
 
-    ${b.userTool} | ${b.userTool.description}      ---> from: ${b.userTool.user}
-    | TILL: ${b.end} <a href="/borrowing/return?toReturnId=${b.id}">RETURN</a>
+    ${b.userTool} | ${b.userTool.description}      ---> OD: ${b.userTool.user}
+    | DO: ${b.end} <a href="/borrowing/return?toReturnId=${b.id}">ODDAJ</a>
     <c:if test="${b.notification != null}">
         |  ${b.notification}
     </c:if>
@@ -56,7 +54,7 @@ BORROWED FROM OTHERS: <br>
 
 <hr>
 
-<h2>MY RESERVATIONS </h2>
+<h2>MOJE REZERWACJE</h2>
 
 <c:forEach items="${reservations}" var="r">
 
@@ -67,7 +65,7 @@ BORROWED FROM OTHERS: <br>
     </c:if>
 
     <c:if test="${r.reservationDayOn == true}">
-        |  <a href="/borrowing/createFromReservation/${r.id}">BORROW</a>
+        |  <a href="/borrowing/createFromReservation/${r.id}">POŻYCZ</a>
     </c:if>
     <br>
     <c:if test="${r.ownerInfo != null}">
@@ -78,7 +76,7 @@ BORROWED FROM OTHERS: <br>
 
 
 <c:if test="${deletedToolsReservations.size()>0}">
-    <h2>RESERVATIONS WITH DELETED TOOLS</h2>
+    <h2>REZERWACJE DO ANULOWANIA</h2>
 
     <c:forEach items="${deletedToolsReservations}" var="r">
 

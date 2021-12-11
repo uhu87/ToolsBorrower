@@ -13,16 +13,16 @@
 <form:form modelAttribute="user">
 
     <form:hidden path="id"/>
-    username: <form:input path="username"/>
+    Nazwa użytkownika: <form:input path="username"/>
     <form:errors path="username" /><br/>
-    firstname:<form:input path="firstName"/>
+    Imię:<form:input path="firstName"/>
     <form:errors path="firstName" /><br/>
-    lastname:<form:input path="lastName"/>
+    Nazwisko:<form:input path="lastName"/>
     <form:errors path="lastName" /><br/>
-    phone:<form:input path="phone"/><br/>
-    email:<form:input path="email"/>
+    Telefon:<form:input path="phone"/><br/>
+    Email:<form:input path="email"/>
     <form:errors path="email" /><br/>
-    password: <form:input path="password" type="password"/>
+    hasło: <form:input path="password" type="password"/>
     <form:errors path="password" /><br/>
 
     <input type="submit" value="REGISTER"><br/>
