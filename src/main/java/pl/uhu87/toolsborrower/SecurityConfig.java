@@ -18,9 +18,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+
                 .antMatchers("/login").permitAll()      // -- dla wszykcih bez uwierzytelnienia
-                .antMatchers("/tool/all").hasAnyRole("USER")
-                .antMatchers("/user/all").hasAnyRole("USER")
+                .antMatchers("/tool/all").permitAll()
+                .antMatchers("/user/**", "/reservation/**",
+                        "/borrowing/**", "/notification/**").hasAnyRole("USER")
+                .antMatchers("/user/edit").authenticated()
                 .and().formLogin()  // -- przekierowany do strony logowania
                 .loginPage("/login")
                 .and().logout().logoutSuccessUrl("/hello")       // domyslny widok wylogowania
