@@ -1,5 +1,7 @@
 package pl.uhu87.toolsborrower.entity;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -21,6 +23,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<UserTool> userTools = new ArrayList<>();
+
     @NotEmpty(message = "Podaj nazwę użytkownika")
     @Column(nullable = false, unique = true, length = 60)
     private String username;

@@ -74,6 +74,7 @@ public class ReservationController {
         try {
             LocalDate returnDate = borrowingRepository.findFirstByUserToolIdAndActiveTrue(toolId).getEnd();
             if(returnDate.isAfter(LocalDate.parse(start)) || returnDate.isEqual(LocalDate.parse(start)) ){
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
                 model.addAttribute("returnDate", returnDate);
                 return "reservation/borrowingOverlap";
             }

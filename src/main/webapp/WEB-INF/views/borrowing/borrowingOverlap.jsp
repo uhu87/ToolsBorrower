@@ -10,12 +10,9 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<%--
 Narzędzie, które chcesz pożyczyć musi byc zwrócone przed ${returnDate} ponieważ inny użytkownik ma rezerwację;
 <br>
---%>
 
-Inny użytkownik oddaje narzędzie w dniu ${returnDate}, wybierz inną datę rezerwacji.<br>
 <br>
-<a href="/reservation/make?toolId=${userTool.id}">POPRAW DATĘ</a>
+<a href="/borrowing/create?toolId=${userTool.id}">POPRAW DATĘ</a>
 

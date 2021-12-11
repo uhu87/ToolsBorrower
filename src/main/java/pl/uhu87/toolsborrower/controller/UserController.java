@@ -134,9 +134,19 @@ public class UserController {
         return "user/edit";
     }
     @PostMapping("/edit")
-    public String editDataPost(@ModelAttribute("user") @Valid User user, BindingResult result){
+    public String editDataPost(@ModelAttribute("user") @Valid User user, BindingResult result, @AuthenticationPrincipal CurrentUser customUser){
         if(result.hasErrors()){
             return "registration/registration";
+        }
+            if (customUser.getUser().getUsername().equals(user.getUsername())){
+                userService.saveUser(user);
+                return "redirect:/user/dashboard";
+            }
+
+        for(User u :userRepository.findAll()){
+            if (u.getUsername().equals(user.getUsername())){
+                return "user/userDuplicateEdit";
+            }
         }
         userService.saveUser(user);
 

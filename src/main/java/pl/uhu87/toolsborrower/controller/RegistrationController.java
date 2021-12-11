@@ -7,9 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import pl.uhu87.toolsborrower.UserService;
 import pl.uhu87.toolsborrower.entity.User;
+import pl.uhu87.toolsborrower.repository.UserRepository;
 
 import javax.validation.Valid;
 
@@ -17,9 +17,11 @@ import javax.validation.Valid;
 public class RegistrationController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/addUser")
@@ -31,9 +33,14 @@ public class RegistrationController {
 
 
     @PostMapping("/addUser")
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult result){
+    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult result, Model model){
         if(result.hasErrors()){
             return "registration/registration";
+        }
+        for(User u :userRepository.findAll()){
+            if (u.getUsername().equals(user.getUsername())){
+               return "registration/userDuplicate";
+            }
         }
         userService.saveUser(user);
         return "redirect:/login";

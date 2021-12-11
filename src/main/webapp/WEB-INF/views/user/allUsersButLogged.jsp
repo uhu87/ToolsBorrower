@@ -10,7 +10,7 @@
 <c:forEach items="${users}" var="u">
 
 
-    <a href="userTools/${u.id}">${u.firstName} ${u.lastName}</a><br>
+    <a href="userTools/${u.id}">${u.username}</a><br>
 
 
 </c:forEach>

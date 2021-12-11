@@ -60,7 +60,7 @@ public class BorrowingController {
             if (LocalDate.parse(end).isAfter(returnDate)) {
                 model.addAttribute("returnDate", returnDate);
                 model.addAttribute("userTool", userToolRepository.getById(toolId));
-                return "reservation/reservationOverlap";
+                return "borrowing/reservationOverlap";
             }
         }catch (NullPointerException e){};
 
