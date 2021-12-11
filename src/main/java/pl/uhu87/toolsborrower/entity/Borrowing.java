@@ -2,6 +2,7 @@ package pl.uhu87.toolsborrower.entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.awt.*;
 import java.time.LocalDate;
 
@@ -22,6 +23,7 @@ public class Borrowing {
     private boolean active = true;
 
     private LocalDate start = LocalDate.now();
+
     private LocalDate end;
 
     private String notification;

@@ -10,7 +10,7 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2>Narzedzie, ktore probujesz pozyczyc musi byc zwrocone przed ${returnDate} gdyz inny uzytkownik ma rezerwacje</h2>
+Narzędzie, które chcesz pożyczyć musi byc zwrócone przed ${returnDate} ponieważ inny użytkownik ma rezerwację;
 <br>
 
 <a href="/borrowing/create?toolId=${userTool.id}">POPRAW DATE</a>

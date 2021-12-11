@@ -10,8 +10,9 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-Data oddania nie może byc w przeszłości
-<br>
 
-<a href="/borrowing/create?toolId=${userTool.id}">POPRAW DATE</a>
+<br>
+Uzupełnij poprawnie daty rezerwacji.<br>
+
+<a href="/reservation/make?toolId=${userTool.id}">POPRAW DATE</a>
 

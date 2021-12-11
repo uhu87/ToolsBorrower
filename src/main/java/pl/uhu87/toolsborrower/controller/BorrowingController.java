@@ -45,24 +45,29 @@ public class BorrowingController {
     public String createBorrowingPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
                                       @RequestParam String end, Model model){
 
+
+
+        if(end.isBlank()){
+            model.addAttribute("userTool", userToolRepository.getById(toolId));
+            return "borrowing/blankData";
+        }
+
+
         updateReservationsStatus(toolId);
         try {
             LocalDate returnDate = reservationRepository.findEarliestActiveReservation(toolId).getStart();
 
-
             if (LocalDate.parse(end).isAfter(returnDate)) {
                 model.addAttribute("returnDate", returnDate);
                 model.addAttribute("userTool", userToolRepository.getById(toolId));
-                return "reservation/borrowingOverlap";
-            }
-
-            if (LocalDate.parse(end).isBefore(LocalDate.now())) {
-                model.addAttribute("returnDate", returnDate);
-                model.addAttribute("userTool", userToolRepository.getById(toolId));
-                return "borrowing/borrowingPast";
+                return "reservation/reservationOverlap";
             }
         }catch (NullPointerException e){};
 
+        if (LocalDate.parse(end).isBefore(LocalDate.now())) {
+            model.addAttribute("userTool", userToolRepository.getById(toolId));
+            return "borrowing/borrowingPast";
+        }
 
         User entityUser = customUser.getUser();
         Borrowing borrowing = new Borrowing();

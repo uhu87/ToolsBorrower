@@ -43,7 +43,10 @@ public class ReservationController {
 
         updateReservationsStatus(toolId);
         List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
-
+        if(start.isBlank() || end.isBlank()){
+            model.addAttribute("userTool", userToolRepository.getById(toolId));
+            return "reservation/blankData";
+        }
 
         User entityUser = customUser.getUser();
         Reservation reservation = new Reservation();
@@ -70,11 +73,9 @@ public class ReservationController {
         }
         try {
             LocalDate returnDate = borrowingRepository.findFirstByUserToolIdAndActiveTrue(toolId).getEnd();
-            if(returnDate.isAfter(LocalDate.parse(start)) | returnDate.isEqual(LocalDate.parse(start)) ){
-                return "nardzenia chwilowo pozyczone, zostanie oddane "+ returnDate.toString() + "wybierz inna date rezerwacji";
-            }
-            if(returnDate.isEqual(LocalDate.parse(start))| returnDate.isEqual(LocalDate.parse(start)) ){
-                return "Dnia"+ returnDate.toString() +" inny uzytkownik oddaje narzedzie, skontaktuje sie z wlasciwielem zeby ustalic szczegoly";
+            if(returnDate.isAfter(LocalDate.parse(start)) || returnDate.isEqual(LocalDate.parse(start)) ){
+                model.addAttribute("returnDate", returnDate);
+                return "reservation/borrowingOverlap";
             }
         } catch (NullPointerException e){};
 
