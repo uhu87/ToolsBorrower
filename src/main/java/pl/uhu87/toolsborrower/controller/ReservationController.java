@@ -39,7 +39,7 @@ public class ReservationController {
 
     @PostMapping("/make")
     public String makeReservationPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
-                                      @RequestParam String start, @RequestParam String end){
+                                      @RequestParam String start, @RequestParam String end, Model model){
 
         updateReservationsStatus(toolId);
         List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
@@ -54,13 +54,17 @@ public class ReservationController {
         reservation.setEnd(LocalDate.parse(end));
         for(Reservation r : allReservationsActive){
             if (isOverlapping(LocalDate.parse(start), LocalDate.parse(end), r.getStart(), r.getEnd())){
-                return "overlpas";
+                model.addAttribute("overlappingReservation", r);
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "reservation/reservationOverlap";
             }
             if(LocalDate.parse(start).isAfter(LocalDate.parse(end))){
-                return "startDate nie moze byc po endDate";
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "reservation/startenderror";
             }
             if(LocalDate.parse(start).isBefore(LocalDate.now())){
-                return "nie mozna rezerwowac w przeszlosci :D";
+                model.addAttribute("userTool", userToolRepository.getById(toolId));
+                return "reservation/paststarterror";
             }
 
         }
@@ -146,8 +150,8 @@ public class ReservationController {
         if(confirmed.equals("yes")){
             reservation.setActive(false);
             reservationRepository.save(reservation);
-            return "redirect:/reservation/myReservations";
+            return "redirect:/user/dashboard";
         }
-        return "redirect:/reservation/myReservations";
+        return "redirect:/user/dashboard";
     }
 }
