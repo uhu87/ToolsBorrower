@@ -4,7 +4,7 @@
 <strong><a href="/tool/all">ALL TOOLS</a></strong> |
 <strong><a href="/user/allButLogged">ALL USERS</a></strong> |
 <strong><a href="/user/dashboard">MY ACCOUNT</a></strong> |
-<strong><a href="/logout1">LOG OUT</a></strong> |
+<strong><a href="/logout1">LOG OUT</a></strong> <br>
 
 <h2>${user.firstName}'s TOOLS</h2>
 <c:if test="${user.phone !=null}">

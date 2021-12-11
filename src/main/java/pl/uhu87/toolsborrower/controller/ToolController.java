@@ -102,6 +102,26 @@ public class ToolController {
     }
 
 
+    //__________________________makeUnavailable_________________________________________________________________
+
+    @GetMapping("/makeUnavailable")
+    public String makeUnavailable(@RequestParam Long idToDelete, Model model){
+        model.addAttribute("userTool", userToolRepository.getById(idToDelete));
+        return "/tool/makeUnavailable";
+    }
+
+    @PostMapping("/makeUnavailable")
+    public String makeUnavailablePost(@RequestParam String confirmed, @RequestParam Long idToDelete){
+        if(confirmed.equals("delete")){
+            UserTool userTool = userToolRepository.getById(idToDelete);
+            userTool.setPresent(false);
+            userToolRepository.save(userTool);
+        }
+        return "redirect:/user/dashboard";
+    }
+
+
+
 
 
     @ModelAttribute("tools")

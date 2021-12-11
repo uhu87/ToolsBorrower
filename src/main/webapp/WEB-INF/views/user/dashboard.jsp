@@ -15,9 +15,9 @@
 <c:forEach items="${userTools}" var="uT">
 
     ${uT.tool} | ${uT.description} | <a href="/tool/editUserTool?idToEdit=${uT.id}">EDIT</a>
-    | <a href="/tool/delete?idToDelete=${uT.id}">DELETE</a>
-    | <a href="/borrowing/history?toolId=${uT.id}">BORROWING HISTORY</a>
-    | <a href="/reservation/reservationList?toolId=${uT.id}">CHECK RESERVATIONS</a>
+    | <a href="/tool/delete?idToDelete=${uT.id}">USUŃ</a>
+    | <a href="/borrowing/history?toolId=${uT.id}">HISTORIA POŻYCZEŃ</a>
+    | <a href="/reservation/reservationList?toolId=${uT.id}">SPRAWDŹ REZERWACJE</a>
 
     <br>
 
@@ -28,7 +28,7 @@
 POŻYCZONE INNYM: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
 <c:forEach items="${lendings}" var="l">
 
-    ${l.userTool} | ${l.userTool.description}    ---> DLA: ${l.user} <a href="/notification/return?toReturnId=${l.id}">WYSLIJ INFO</a> <br>
+    ${l.userTool} | ${l.userTool.description}    ---> DLA: ${l.user} <a href="/notification/return?toReturnId=${l.id}">WYŚLIJ INFO</a> <br>
 
 </c:forEach>
 

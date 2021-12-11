@@ -5,7 +5,7 @@
 <strong><a href="/tool/all">ALL TOOLS</a></strong> |
 <strong><a href="/user/allButLogged">ALL USERS</a></strong> |
 <strong><a href="/user/dashboard">MY ACCOUNT</a></strong> |
-<strong><a href="/logout1">LOG OUT</a></strong> |
+<strong><a href="/logout1">LOG OUT</a></strong><br>
 
 <c:forEach items="${users}" var="u">
 

@@ -39,11 +39,11 @@ public class ReservationController {
 
     @PostMapping("/make")
     public String makeReservationPost(@RequestParam Long toolId, @AuthenticationPrincipal CurrentUser customUser,
-                                      @RequestParam String start, @RequestParam String end, Model model){
+                                      @RequestParam String start, @RequestParam String end, Model model) {
 
         updateReservationsStatus(toolId);
         List<Reservation> allReservationsActive = reservationRepository.findAllByUserToolIdAndActiveTrueOrderByStart(toolId);
-        if(start.isBlank() || end.isBlank()){
+        if (start.isBlank() || end.isBlank()) {
             model.addAttribute("userTool", userToolRepository.getById(toolId));
             return "reservation/blankData";
         }
@@ -55,30 +55,37 @@ public class ReservationController {
         UserTool userTool = userToolRepository.getById(reservation.getUserTool().getId());
         reservation.setStart(LocalDate.parse(start));
         reservation.setEnd(LocalDate.parse(end));
-        for(Reservation r : allReservationsActive){
-            if (isOverlapping(LocalDate.parse(start), LocalDate.parse(end), r.getStart(), r.getEnd())){
+        for (Reservation r : allReservationsActive) {
+            if (isOverlapping(LocalDate.parse(start), LocalDate.parse(end), r.getStart(), r.getEnd())) {
                 model.addAttribute("overlappingReservation", r);
                 model.addAttribute("userTool", userToolRepository.getById(toolId));
                 return "reservation/reservationOverlap";
             }
-            if(LocalDate.parse(start).isAfter(LocalDate.parse(end))){
-                model.addAttribute("userTool", userToolRepository.getById(toolId));
-                return "reservation/startenderror";
-            }
-            if(LocalDate.parse(start).isBefore(LocalDate.now())){
-                model.addAttribute("userTool", userToolRepository.getById(toolId));
-                return "reservation/paststarterror";
-            }
-
         }
+        // ______________DLACZEGO NIE ZABIERA NA WIDOK ?________________
+        if (LocalDate.parse(start).isAfter(LocalDate.parse(end))) {
+            model.addAttribute("userTool", userToolRepository.getById(toolId));
+            return "reservation/startenderror";
+        }
+
+        // ______________DLACZEGO NIE ZABIERA NA WIDOK ?________________
+
+        if (LocalDate.parse(start).isBefore(LocalDate.now())) {
+            model.addAttribute("userTool", userToolRepository.getById(toolId));
+            return "reservation/paststarterror";
+        }
+
+
         try {
             LocalDate returnDate = borrowingRepository.findFirstByUserToolIdAndActiveTrue(toolId).getEnd();
-            if(returnDate.isAfter(LocalDate.parse(start)) || returnDate.isEqual(LocalDate.parse(start)) ){
+            if (returnDate.isAfter(LocalDate.parse(start)) || returnDate.isEqual(LocalDate.parse(start))) {
                 model.addAttribute("userTool", userToolRepository.getById(toolId));
                 model.addAttribute("returnDate", returnDate);
                 return "reservation/borrowingOverlap";
             }
-        } catch (NullPointerException e){};
+        } catch (NullPointerException e) {
+        }
+        ;
 
         reservationRepository.save(reservation);
 
@@ -97,6 +104,7 @@ public class ReservationController {
         model.addAttribute("borrowing", activeBorrowings);
         return "reservation/reservationList";
     }
+
     @GetMapping("/userReservationList")
     public String showAllUserReservations(Model model, @RequestParam Long toolId) {
 
@@ -111,15 +119,14 @@ public class ReservationController {
     }
 
 
-
     public static boolean isOverlapping(LocalDate start1, LocalDate end1, LocalDate start2, LocalDate end2) {
         return !start1.isAfter(end2) && !start2.isAfter(end1);
     }
 
-    public void updateReservationsStatus(Long toolId){
+    public void updateReservationsStatus(Long toolId) {
         List<Reservation> allReservations = reservationRepository.findAllByUserToolIdOrderByStart(toolId);
-        for(Reservation r : allReservations){
-            if (LocalDate.now().isAfter(r.getStart())){
+        for (Reservation r : allReservations) {
+            if (LocalDate.now().isAfter(r.getStart())) {
                 r.setActive(false);
                 reservationRepository.save(r);
             }
@@ -139,7 +146,7 @@ public class ReservationController {
 
 
     @GetMapping("/cancel")
-    public String cancelReservation(Model model, @RequestParam("reservationId") Long reservationId){
+    public String cancelReservation(Model model, @RequestParam("reservationId") Long reservationId) {
 
         Reservation reservation = reservationRepository.getById(reservationId);
         model.addAttribute("reservation", reservation);
@@ -147,9 +154,9 @@ public class ReservationController {
     }
 
     @PostMapping("/cancel")
-    public String cancelReservationPost(@RequestParam String confirmed, @RequestParam Long reservationId){
+    public String cancelReservationPost(@RequestParam String confirmed, @RequestParam Long reservationId) {
         Reservation reservation = reservationRepository.getById(reservationId);
-        if(confirmed.equals("yes")){
+        if (confirmed.equals("yes")) {
             reservation.setActive(false);
             reservationRepository.save(reservation);
             return "redirect:/user/dashboard";
