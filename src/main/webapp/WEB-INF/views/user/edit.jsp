@@ -22,7 +22,7 @@
     phone:<form:input path="phone"/><br/>
     email:<form:input path="email"/>
     <form:errors path="email" /><br/>
-    password: <form:input path="password" type="password"/>
+    password: <form:password showPassword="false" path="password"/>
     <form:errors path="password" /><br/>
 
     <input type="submit" value="SAVE"><br/>

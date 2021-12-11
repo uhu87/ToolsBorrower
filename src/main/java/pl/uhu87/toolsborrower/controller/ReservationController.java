@@ -82,7 +82,7 @@ public class ReservationController {
 
         reservationRepository.save(reservation);
 
-        return "redirect:/reservation/userReservationList?toolId="+toolId;
+        return "redirect:/user/dashboard";
     }
 
     @GetMapping("/reservationList")

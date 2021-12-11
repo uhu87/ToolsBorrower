@@ -1,16 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<strong><a href="/tool/all">ALL TOOLS</a></strong><br>
-<strong><a href="/user/allButLogged">ALL USERS</a></strong><br>
-<strong><a href="/logout1">LOG OUT</a></strong><br>
-<strong><a href="/tool/addUserTool">ADD TOOL</a></strong><br>
-<strong><a href="/user/edit">EDYTUJ DANE</a></strong><br>
+<strong><a href="/tool/all">ALL TOOLS</a></strong> |
+<strong><a href="/user/allButLogged">ALL USERS</a></strong> |
+<strong><a href="/logout1">LOG OUT</a></strong> |
+<strong><a href="/tool/addUserTool">ADD TOOL</a></strong> |
+<strong><a href="/user/edit">EDYTUJ DANE</a></strong> |
+<strong><a href="/hello">STRONA GŁÓWNA</a></strong><br>
 
-<h2>WITAJ <sec:authentication property="principal.username"/></h2>
-
+<%--<h2>WITAJ <sec:authentication property="principal.username"/></h2>--%>
+<h2>WITAJ ${user.username}</h2>
 <hr>
-<h2>WSZYSTKIE NARZĘDZIA:</h2><br>
+<h2>WSZYSTKIE NARZĘDZIA:</h2>
 <c:forEach items="${userTools}" var="uT">
 
     ${uT.tool} | ${uT.description} | <a href="/tool/editUserTool?idToEdit=${uT.id}">EDIT</a>
@@ -23,14 +24,7 @@
 </c:forEach>
 
 <hr>
-<%--AVAILABLE: <br>
-<c:forEach items="${userToolsAvailable}" var="uTA">
 
-    ${uTA.tool} | ${uTA.description}  &lt;%&ndash;<a href="/borrowing/create?toolId=${uTA.id}"?>BORROW THIS TOOL</a>&ndash;%&gt;  <br>
-
-</c:forEach>
-
-<hr>--%>
 POŻYCZONE INNYM: <br>                                    <%--// mozna potem wykorzystywac na bazie borrowingsow//--%>
 <c:forEach items="${lendings}" var="l">
 

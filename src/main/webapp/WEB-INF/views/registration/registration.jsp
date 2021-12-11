@@ -9,7 +9,8 @@
 <body>
 
 <h1>REGISTRATION</h1>
-
+<strong><a href="/hello">STRONA GŁÓWNA</a></strong><br>
+<br>
 <form:form modelAttribute="user">
 
     <form:hidden path="id"/>

@@ -2,10 +2,10 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 
 
-<strong><a href="/tool/all">ALL TOOLS</a></strong><br>
-<strong><a href="/user/allButLogged">ALL USERS</a></strong><br>
-<strong><a href="/user/dashboard">MY ACCOUNT</a></strong><br>
-<strong><a href="/logout1">LOG OUT</a></strong><br>
+<strong><a href="/tool/all">ALL TOOLS</a></strong> |
+<strong><a href="/user/allButLogged">ALL USERS</a></strong> |
+<strong><a href="/user/dashboard">MY ACCOUNT</a></strong> |
+<strong><a href="/hello">STRONA GŁÓWNA</a></strong><br>
 
 <c:forEach items="${tools}" var="t">
 
