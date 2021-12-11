@@ -4,6 +4,7 @@ package pl.uhu87.toolsborrower.controller;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.entity.CurrentUser;
 import pl.uhu87.toolsborrower.entity.Tool;
@@ -13,7 +14,7 @@ import pl.uhu87.toolsborrower.repository.ToolRepository;
 import pl.uhu87.toolsborrower.repository.UserRepository;
 import pl.uhu87.toolsborrower.repository.UserToolRepository;
 
-
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -38,9 +39,11 @@ public class ToolController {
     }
 
     @GetMapping("/toolUsers/{toolId}")
-    public String allUsersByTool(Model model, @PathVariable("toolId") Long tooLId){
 
-        model.addAttribute("userTools", userToolRepository.findAllByToolId(tooLId));
+    public String allUsersByTool(Model model, @PathVariable("toolId") Long toolId){
+
+
+        model.addAttribute("toolUsers", userRepository.uniqueToolUsers(toolId));
         return "tool/toolUsers";
     }
 
@@ -54,7 +57,11 @@ public class ToolController {
     }
 
     @PostMapping("/addUserTool")
-    public String addUserToolPost(@ModelAttribute("userTool") UserTool userTool, @AuthenticationPrincipal CurrentUser currentUser){
+    public String addUserToolPost(@ModelAttribute("userTool") @Valid UserTool userTool,BindingResult result,
+                                  @AuthenticationPrincipal CurrentUser currentUser){
+        if(result.hasErrors()){
+            return "tool/userToolForm";
+        }
 
         userTool.setUser(currentUser.getUser());
         userToolRepository.save(userTool);
@@ -93,6 +100,27 @@ public class ToolController {
         }
             return "redirect:/user/dashboard";
     }
+
+
+    //__________________________makeUnavailable_________________________________________________________________
+
+    @GetMapping("/makeUnavailable")
+    public String makeUnavailable(@RequestParam Long idToDelete, Model model){
+        model.addAttribute("userTool", userToolRepository.getById(idToDelete));
+        return "/tool/makeUnavailable";
+    }
+
+    @PostMapping("/makeUnavailable")
+    public String makeUnavailablePost(@RequestParam String confirmed, @RequestParam Long idToDelete){
+        if(confirmed.equals("delete")){
+            UserTool userTool = userToolRepository.getById(idToDelete);
+            userTool.setPresent(false);
+            userToolRepository.save(userTool);
+        }
+        return "redirect:/user/dashboard";
+    }
+
+
 
 
 

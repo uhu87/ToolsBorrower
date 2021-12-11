@@ -1,6 +1,10 @@
 package pl.uhu87.toolsborrower.entity;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -12,15 +16,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotEmpty(message = "Podaj imię")
     private String firstName;
+    @NotEmpty(message = "Podaj nazwisko")
     private String lastName;
 
     @OneToMany(mappedBy = "user")
     private List<UserTool> userTools = new ArrayList<>();
 
+    @NotEmpty(message = "Podaj nazwę użytkownika")
     @Column(nullable = false, unique = true, length = 60)
     private String username;
+    @NotEmpty(message = "musisz podać password")
     private String password;
     private int enabled;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -29,6 +36,7 @@ public class User {
     private Set<Role> roles;
 
     private String phone;
+    @Email(message = "Podaj poprawny adres email aby inni użytkownicy mogli się z Tobą skontaktować")
     private String email;
     private boolean active = true;
 

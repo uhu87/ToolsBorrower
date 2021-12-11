@@ -4,20 +4,27 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>REGISTRATION</title>
+    <title>TOOLS_BORROWER - REGISTRATION</title>
 </head>
 <body>
 
+<h1>REGISTRATION</h1>
+<strong><a href="/hello">STRONA GŁÓWNA</a></strong><br>
+<br>
 <form:form modelAttribute="user">
 
-    <form:hidden path="id"/><br/>
-    username: <form:input path="username"/><br/>
-    firstname:<form:input path="firstName"/><br/>
-    lastname:<form:input path="lastName"/><br/>
-    phone:<form:input path="phone"/><br/>
-    email:<form:input path="email"/><br/>
-    password: <form:input path="password"/><br/>
-
+    <form:hidden path="id"/>
+    Nazwa użytkownika: <form:input path="username"/>
+    <form:errors path="username" /><br/>
+    Imię:<form:input path="firstName"/>
+    <form:errors path="firstName" /><br/>
+    Nazwisko:<form:input path="lastName"/>
+    <form:errors path="lastName" /><br/>
+    Telefon:<form:input path="phone"/><br/>
+    Email:<form:input path="email"/>
+    <form:errors path="email" /><br/>
+    hasło: <form:input path="password" type="password"/>
+    <form:errors path="password" /><br/>
 
     <input type="submit" value="REGISTER"><br/>
 

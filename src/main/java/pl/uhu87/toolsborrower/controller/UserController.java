@@ -5,12 +5,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.uhu87.toolsborrower.UserService;
 import pl.uhu87.toolsborrower.entity.*;
 import pl.uhu87.toolsborrower.repository.*;
 
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +38,12 @@ public class UserController {
         this.reservationRepository = reservationRepository;
     }
 
-    @GetMapping("/all")
+   /* @GetMapping("/all")
     public String allUsers(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
 
         model.addAttribute("users", userRepository.findAll());
         return "user/allUsers";
-    }
+    }*/
 
     @GetMapping("/allButLogged")
     public String allUsersButLogged(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
@@ -84,6 +86,7 @@ public class UserController {
 
 
     @GetMapping("/dashboard")
+
     public String dashboard(Model model, @AuthenticationPrincipal CurrentUser customUser) {
         User entityUser = customUser.getUser();
         User user = userRepository.getById(entityUser.getId());
@@ -92,7 +95,7 @@ public class UserController {
         model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
 
 
-        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
+        List<Reservation> myReservations = reservationRepository.findAllActiveAndToolsPresent(customUser.getUser().getId());
         //List <Reservation> updatedReservations = new ArrayList<>();
         for (Reservation r : myReservations) {
             if (LocalDate.now().isAfter(r.getStart())) {
@@ -105,16 +108,18 @@ public class UserController {
             }
             //updatedReservations.add(r);
         }
-        List<Reservation> updatedReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
-
+        List<Reservation> updatedReservations = reservationRepository.findAllActiveAndToolsPresent(customUser.getUser().getId());
         model.addAttribute("reservations", updatedReservations);
 
+        List<Reservation> deletedToolsReservations = reservationRepository.findReservationsWithToolsNotPresent(entityUser.getId());
+        model.addAttribute("deletedToolsReservations", deletedToolsReservations);
 
         List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(entityUser.getId());        // miejsce na streama
         model.addAttribute("borrowings", borrowings);
 
         List<Borrowing> lendings = borrowingRepository.findAllLentbyLenderId(entityUser.getId());
         model.addAttribute("lendings", lendings);
+
 
         return "user/dashboard";
 
@@ -129,14 +134,33 @@ public class UserController {
         return "user/edit";
     }
     @PostMapping("/edit")
-    public String editDataPost(@ModelAttribute("user") User user, @RequestParam String password){
-        user.setPassword(password);
+    public String editDataPost(@ModelAttribute("user") @Valid User user, BindingResult result, @AuthenticationPrincipal CurrentUser customUser){
+        if(result.hasErrors()){
+            return "registration/registration";
+        }
+            if (customUser.getUser().getUsername().equals(user.getUsername())){
+                userService.saveUser(user);
+                return "redirect:/user/dashboard";
+            }
+
+        for(User u :userRepository.findAll()){
+            if (u.getUsername().equals(user.getUsername())){
+                return "user/userDuplicateEdit";
+            }
+        }
         userService.saveUser(user);
 
         return "redirect:/user/dashboard";
     }
 
 
+    @GetMapping("/userTools")
+    public String enterUserToolsFromDifferentView(@RequestParam("username") String username, Model model){
+
+        Long userId = userRepository.findByUsername(username).getId();
+        User user = userRepository.getById(userId);
+        return "redirect:/user/userTools/"+userId;
+    }
 
 
 

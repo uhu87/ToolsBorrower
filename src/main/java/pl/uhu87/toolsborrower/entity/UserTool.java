@@ -2,6 +2,7 @@ package pl.uhu87.toolsborrower.entity;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 
 @Entity
 public class UserTool {
@@ -21,7 +22,7 @@ public class UserTool {
                              Jest to adnotacja opcjonalna – za jej pomocą określamy nazwę klucza obcego.
                              W przypadku braku zdefiniowanej nazwy, klucz obcy otrzyma nazwę składającą się
                              z nazwy pola, znaku podkreślenia oraz nazwy klucza drugiej encji. */
-
+    @Size(max = 255, message = "minimum 100 znaków")
     private String description;
 
     private boolean available = true;

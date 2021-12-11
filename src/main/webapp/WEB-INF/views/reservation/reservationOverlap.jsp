@@ -10,12 +10,9 @@
 
 <%@ page contentType="text/html; charset=UTF-8" %>
 
-<h2>Czy chcesz zrezygnować z poniższej rezerwacji?</h2>
-<form:form modelAttribute="reservation">
-<%--<form:hidden path="id" value="${reservation.id}" /><br/>--%>
 
-    ${reservation.userTool} | ${reservation.start} | ${reservation.end}  from ---> ${reservation.userTool.user} <br>
-    <button type="submit" value="yes" name="confirmed">Tak, rezygnuję z rezerwacji</button>
-    <button type="submit" value="no" name="confirmed">Nie</button>
+<br>
+Nie możesz dokonać rezerwacji w tych dniach ponieważ inny użytkownik ma rezerwacje w dniach: <br>
+${overlappingReservation.start} | ${overlappingReservation.end}
+<a href="/reservation/make?toolId=${userTool.id}">POPRAW DATĘ</a>
 
-</form:form>

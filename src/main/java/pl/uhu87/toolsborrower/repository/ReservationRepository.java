@@ -24,4 +24,14 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List <Reservation> findAllByUserAndActiveTrue (User user);
     List <Reservation> findAllByUserAndActiveTrueOrderByStartAsc (User user);
 
+    @Query("select r from Reservation r where r.userTool.present = true and r.user.id= :givenId and r.active=true order by r.start asc")
+    List<Reservation> findAllActiveAndToolsPresent (@Param("givenId") Long id);
+
+
+
+
+    @Query("select r from Reservation r where r.userTool.present = false and r.user.id= :givenId and r.active=true order by r.start")
+    List<Reservation> findReservationsWithToolsNotPresent (@Param("givenId") Long id);
+
+
 }
