@@ -38,12 +38,12 @@ public class UserController {
         this.reservationRepository = reservationRepository;
     }
 
-    @GetMapping("/all")
+   /* @GetMapping("/all")
     public String allUsers(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
 
         model.addAttribute("users", userRepository.findAll());
         return "user/allUsers";
-    }
+    }*/
 
     @GetMapping("/allButLogged")
     public String allUsersButLogged(Model model, @AuthenticationPrincipal CurrentUser currentUser) {
@@ -86,6 +86,7 @@ public class UserController {
 
 
     @GetMapping("/dashboard")
+
     public String dashboard(Model model, @AuthenticationPrincipal CurrentUser customUser) {
         User entityUser = customUser.getUser();
         User user = userRepository.getById(entityUser.getId());
@@ -94,7 +95,7 @@ public class UserController {
         model.addAttribute("userToolsAvailable", userToolRepository.findAllByUserAndAvailableTrueAndPresentTrue(user));
 
 
-        List<Reservation> myReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
+        List<Reservation> myReservations = reservationRepository.findAllActiveAndToolsPresent(customUser.getUser().getId());
         //List <Reservation> updatedReservations = new ArrayList<>();
         for (Reservation r : myReservations) {
             if (LocalDate.now().isAfter(r.getStart())) {
@@ -107,16 +108,18 @@ public class UserController {
             }
             //updatedReservations.add(r);
         }
-        List<Reservation> updatedReservations = reservationRepository.findAllByUserAndActiveTrueOrderByStartAsc(customUser.getUser());
-
+        List<Reservation> updatedReservations = reservationRepository.findAllActiveAndToolsPresent(customUser.getUser().getId());
         model.addAttribute("reservations", updatedReservations);
 
+        List<Reservation> deletedToolsReservations = reservationRepository.findReservationsWithToolsNotPresent(entityUser.getId());
+        model.addAttribute("deletedToolsReservations", deletedToolsReservations);
 
         List<Borrowing> borrowings = borrowingRepository.findAllByUserIdAndActiveTrue(entityUser.getId());        // miejsce na streama
         model.addAttribute("borrowings", borrowings);
 
         List<Borrowing> lendings = borrowingRepository.findAllLentbyLenderId(entityUser.getId());
         model.addAttribute("lendings", lendings);
+
 
         return "user/dashboard";
 
@@ -137,23 +140,17 @@ public class UserController {
         }
         userService.saveUser(user);
 
-        return "redirect:/user/dashboard";
+        return "user/userTools";
     }
 
 
-/*    @PostMapping("/addUser")
-    public String saveUser(@ModelAttribute("user") @Valid User user, BindingResult result){
-        if(result.hasErrors()){
-            return "registration/registration";
-        }
-        userService.saveUser(user);
-        return "redirect:/login";
-    }*/
+    @GetMapping("/userTools")
+    public String enterUserToolsFromDifferentView(@RequestParam("username") String username, Model model){
 
-
-
-
-
+        Long userId = userRepository.findByUsername(username).getId();
+        User user = userRepository.getById(userId);
+        return "redirect:/user/userTools/"+userId;
+    }
 
 
 

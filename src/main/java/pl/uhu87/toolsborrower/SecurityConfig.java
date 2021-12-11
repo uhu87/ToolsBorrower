@@ -22,7 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll()      // -- dla wszykcih bez uwierzytelnienia
                 .antMatchers("/tool/all").permitAll()
                 .antMatchers("/user/**", "/reservation/**",
-                        "/borrowing/**", "/notification/**").hasAnyRole("USER")
+                        "/borrowing/**", "/notification/**", "/tool/toolUsers/**").hasAnyRole("USER")
                 .antMatchers("/user/edit").authenticated()
                 .and().formLogin()  // -- przekierowany do strony logowania
                 .loginPage("/login")

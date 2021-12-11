@@ -39,9 +39,11 @@ public class ToolController {
     }
 
     @GetMapping("/toolUsers/{toolId}")
-    public String allUsersByTool(Model model, @PathVariable("toolId") Long tooLId){
 
-        model.addAttribute("userTools", userToolRepository.findAllByToolId(tooLId));
+    public String allUsersByTool(Model model, @PathVariable("toolId") Long toolId){
+
+
+        model.addAttribute("toolUsers", userRepository.uniqueToolUsers(toolId));
         return "tool/toolUsers";
     }
 
@@ -98,6 +100,7 @@ public class ToolController {
         }
             return "redirect:/user/dashboard";
     }
+
 
 
 
